@@ -557,6 +557,92 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .stats-hint  { font-size: 0.87rem; color: var(--subtext); font-style: italic; }
 .stats-empty { text-align: center; color: var(--subtext); padding: 32px 0; font-size: 0.95rem; }
 
+/* ===== Footer ===== */
+.app-footer {
+  text-align: center;
+  padding: 20px 16px 28px;
+  margin-top: 8px;
+}
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-link {
+  background: none;
+  border: none;
+  color: var(--subtext);
+  font-size: 0.82rem;
+  padding: 4px 0;
+  cursor: pointer;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  border-radius: 0;
+}
+.footer-link:hover { color: var(--primary); transform: none; }
+.footer-link:active { transform: none; }
+
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+.modal-card {
+  background: #fff;
+  border-radius: 14px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-header h2 { font-size: 1.15rem; font-weight: 700; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--subtext);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+}
+.modal-close:hover { background: var(--border); color: var(--text); transform: none; }
+.modal-close:active { transform: none; }
+.modal-body {
+  padding: 20px 24px 24px;
+  overflow-y: auto;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text);
+}
+.modal-body h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--subtext);
+  margin: 18px 0 6px;
+}
+.modal-body h3:first-child { margin-top: 0; }
+.modal-body p { margin-bottom: 8px; }
+
 /* ===== Guest/info banner ===== */
 .guest-banner {
   background: #eff6ff;

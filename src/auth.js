@@ -17,11 +17,11 @@ export async function signOut() {
 
 export function onAuth(callback) {
   if (!isConfigured) {
-    callback(null);
+    callback(null, 'INITIAL_SESSION');
     return;
   }
-  supabase.auth.getSession().then(({ data }) => callback(data.session));
-  supabase.auth.onAuthStateChange((_event, session) => callback(session));
+  supabase.auth.getSession().then(({ data }) => callback(data.session, 'INITIAL_SESSION'));
+  supabase.auth.onAuthStateChange((event, session) => callback(session, event));
 }
 
 export async function getCurrentUser() {

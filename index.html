@@ -233,6 +233,36 @@
     </div>
   </div>
 
+  <!-- ===== Footer ===== -->
+  <footer class="app-footer">
+    <nav class="footer-nav">
+      <button class="footer-link" id="btn-impressum">Impressum</button>
+      <button class="footer-link" id="btn-datenschutz">Datenschutz</button>
+    </nav>
+  </footer>
+
+  <!-- ===== Impressum Modal ===== -->
+  <div id="impressum-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Impressum</h2>
+        <button class="modal-close" id="btn-close-impressum" aria-label="Schließen">&#10005;</button>
+      </div>
+      <div class="modal-body" id="impressum-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== Datenschutz Modal ===== -->
+  <div id="datenschutz-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Datenschutzerklärung</h2>
+        <button class="modal-close" id="btn-close-datenschutz" aria-label="Schließen">&#10005;</button>
+      </div>
+      <div class="modal-body" id="datenschutz-content"></div>
+    </div>
+  </div>
+
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

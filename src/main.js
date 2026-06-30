@@ -9,6 +9,7 @@ import { renderStats } from './stats.js';
 import { initBrowse, filterBrowse, toggleBrowseCat } from './browse.js';
 import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
+import { mountLegal } from './legal.js';
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
@@ -184,7 +185,11 @@ async function init() {
   });
   document.getElementById('btn-guest').addEventListener('click', () => enterApp(null));
 
-  onAuth(session => { if (session) enterApp(session); });
+  onAuth((session, event) => {
+    // Only navigate to start on initial load or explicit sign-in, not on token refresh
+    if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') return;
+    if (session) enterApp(session);
+  });
 
   // Start screen
   document.getElementById('filter-toggle-cat').addEventListener('click',
@@ -248,6 +253,37 @@ async function init() {
   // Stats screen
   document.getElementById('btn-stats-back').addEventListener('click',
     () => show('start-screen'));
+
+  // Impressum modal
+  const impressumOverlay = document.getElementById('impressum-overlay');
+  document.getElementById('btn-impressum').addEventListener('click', () => {
+    mountLegal(document.getElementById('impressum-content'), 'impressum');
+    impressumOverlay.classList.remove('hidden');
+  });
+  document.getElementById('btn-close-impressum').addEventListener('click',
+    () => impressumOverlay.classList.add('hidden'));
+  impressumOverlay.addEventListener('click', e => {
+    if (e.target === impressumOverlay) impressumOverlay.classList.add('hidden');
+  });
+
+  // Datenschutz modal
+  const datenschutzOverlay = document.getElementById('datenschutz-overlay');
+  document.getElementById('btn-datenschutz').addEventListener('click', () => {
+    mountLegal(document.getElementById('datenschutz-content'), 'datenschutz');
+    datenschutzOverlay.classList.remove('hidden');
+  });
+  document.getElementById('btn-close-datenschutz').addEventListener('click',
+    () => datenschutzOverlay.classList.add('hidden'));
+  datenschutzOverlay.addEventListener('click', e => {
+    if (e.target === datenschutzOverlay) datenschutzOverlay.classList.add('hidden');
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      impressumOverlay.classList.add('hidden');
+      datenschutzOverlay.classList.add('hidden');
+    }
+  });
 }
 
 init();
