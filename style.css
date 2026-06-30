@@ -295,7 +295,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .tagline { color: var(--subtext); margin-bottom: 28px; font-size: 1rem; }
 .stats { display: flex; gap: 24px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
 .stat { text-align: center; }
-.stat-num   { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+.stat-num   { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
 .stat-label { font-size: 0.82rem; color: var(--subtext); }
 
 .count-row { margin: 22px 0 20px; text-align: center; }
@@ -662,7 +662,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   text-underline-offset: 3px;
   border-radius: 0;
 }
-.footer-link:hover { color: var(--accent); transform: none; }
+.footer-link:hover { color: #ffffff; transform: none; }
 .footer-link:active { transform: none; }
 
 /* ===== Modal ===== */
