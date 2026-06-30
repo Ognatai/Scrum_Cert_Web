@@ -143,9 +143,7 @@ function startQuiz(mode) {
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 async function updateFehlerPoolButton() {
   const count = await getFehlerPoolCount(currentUser);
-  const badge = document.getElementById('fehler-count-badge');
-  badge.textContent = count;
-  document.getElementById('btn-open-fehlerPool').disabled = count === 0;
+  document.getElementById('fehler-count-badge').textContent = count;
 }
 
 function enterApp(session) {
