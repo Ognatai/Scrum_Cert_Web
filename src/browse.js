@@ -3,9 +3,12 @@ import { shuffle } from './shuffle.js';
 let allQuestions = [];
 let browseCategories = new Set();
 
-export function initBrowse(questions) {
+export function initBrowse(questions, title) {
   allQuestions = questions;
   browseCategories = new Set();
+
+  const h2 = document.querySelector('#browse-screen h2');
+  if (h2) h2.textContent = title ?? 'Fragen & Antworten durchsuchen';
 
   // Build category checkboxes
   const catCounts = {};
