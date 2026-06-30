@@ -59,7 +59,7 @@ export function filterBrowse() {
   });
 
   document.getElementById('browse-count').textContent =
-    `Showing ${filtered.length} of ${allQuestions.length} questions`;
+    `${filtered.length} von ${allQuestions.length} Fragen angezeigt`;
 
   document.getElementById('browse-list').innerHTML = filtered.map(q => {
     const correctOpts = q.options

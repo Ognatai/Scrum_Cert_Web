@@ -33,7 +33,7 @@ export async function renderStats(user) {
     ? stats.reduce((s, r) => s + Number(r.gesamt), 0)
     : getTotalLocalAnswers();
 
-  totalEl.textContent = `${total} answers recorded`;
+  totalEl.textContent = `${total} Antworten gespeichert`;
 
   tableEl.innerHTML = stats.map(row => {
     const pct = Number(row.prozent);

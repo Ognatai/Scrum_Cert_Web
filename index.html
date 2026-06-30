@@ -13,7 +13,7 @@
     <div class="card login-card">
       <div class="login-logo">📋</div>
       <h1>PSM I Quiz</h1>
-      <p class="login-subtitle">Professional Scrum Master I — Practice Exam</p>
+      <p class="login-subtitle">Professional Scrum Master I — Prüfungsvorbereitung</p>
 
       <div id="login-form">
         <h2>Anmelden</h2>
@@ -51,8 +51,8 @@
   <div id="start-screen" class="hidden">
     <div class="container">
       <header>
-        <h1>PSM I Practice Quiz</h1>
-        <p>Professional Scrum Master I — Practice Exam</p>
+        <h1>PSM I Übungsquiz</h1>
+        <p>Professional Scrum Master I — Prüfungsvorbereitung</p>
       </header>
 
       <div id="guest-banner" class="guest-banner hidden">
@@ -61,30 +61,30 @@
       </div>
 
       <div class="card">
-        <div class="big-title">PSM I Practice Quiz</div>
+        <div class="big-title">PSM I Übungsquiz</div>
         <div class="stats">
           <div class="stat">
             <div class="stat-num" id="total-q-count">268</div>
-            <div class="stat-label">Questions</div>
+            <div class="stat-label">Fragen</div>
           </div>
           <div class="stat">
             <div class="stat-num">85%</div>
-            <div class="stat-label">Passing Score</div>
+            <div class="stat-label">Bestehensgrenze</div>
           </div>
         </div>
 
-        <!-- Count -->
+        <!-- Anzahl -->
         <div class="count-row">
-          <span class="count-label">Questions per session</span>
+          <span class="count-label">Fragen pro Sitzung</span>
           <div class="count-input-row">
             <input class="count-big" type="number" id="range-count" min="1" max="268" value="30"/>
-            <span class="count-of" id="count-of-label">of 268</span>
+            <span class="count-of" id="count-of-label">von 268</span>
           </div>
         </div>
 
         <!-- Filter by Category -->
         <button class="filter-toggle" id="filter-toggle-cat">
-          <span>Filter by Category <span class="active-filters-hint" id="filter-hint-cat"></span></span>
+          <span>Nach Kategorie filtern <span class="active-filters-hint" id="filter-hint-cat"></span></span>
           <span class="filter-chevron" id="filter-chevron-cat">&#9660;</span>
         </button>
         <div class="filter-panel" id="filter-panel-cat">
@@ -93,40 +93,40 @@
 
         <!-- Filter by Question Range -->
         <button class="filter-toggle" id="filter-toggle-range" style="margin-top:8px">
-          <span>Filter by Question Number <span class="active-filters-hint" id="filter-hint-range"></span></span>
+          <span>Nach Fragennummer filtern <span class="active-filters-hint" id="filter-hint-range"></span></span>
           <span class="filter-chevron" id="filter-chevron-range">&#9660;</span>
         </button>
         <div class="filter-panel" id="filter-panel-range">
           <div class="range-inputs" id="range-inputs">
             <div class="range-field">
-              <label>From Q#</label>
+              <label>Von F#</label>
               <input type="number" id="range-from" min="1" max="268" value="1"/>
-              <span class="field-hint">start</span>
+              <span class="field-hint">Start</span>
             </div>
             <div class="range-field">
-              <label>To Q#</label>
+              <label>Bis F#</label>
               <input type="number" id="range-to" min="1" max="268" value="268"/>
-              <span class="field-hint">end</span>
+              <span class="field-hint">Ende</span>
             </div>
           </div>
         </div>
 
         <div class="range-error" id="range-error"></div>
 
-        <!-- Actions -->
+        <!-- Aktionen -->
         <div class="start-actions">
           <div class="mode-select" style="margin-bottom:0">
             <button class="mode-btn btn-secondary" id="btn-start-normal">
               <div class="mode-title">Normal</div>
-              <div class="mode-desc">Check each answer immediately · Explanations shown</div>
+              <div class="mode-desc">Antwort sofort prüfen · Erklärungen sichtbar</div>
             </button>
             <button class="mode-btn btn-primary" id="btn-start-timed">
-              <div class="mode-title">&#9200; Timed</div>
-              <div class="mode-desc">45 sec / question · Submit all at end · No explanations</div>
+              <div class="mode-title">&#9200; Zeitlimit</div>
+              <div class="mode-desc">45 Sek / Frage · Alle am Ende abgeben · Keine Erklärungen</div>
             </button>
           </div>
-          <button class="btn-secondary" id="btn-show-browse" style="width:100%">&#128270; Browse All Questions &amp; Answers</button>
-          <button class="btn-secondary" id="btn-show-stats" style="width:100%">&#128202; My Statistics</button>
+          <button class="btn-secondary" id="btn-show-browse" style="width:100%">&#128270; Alle Fragen &amp; Antworten durchsuchen</button>
+          <button class="btn-secondary" id="btn-show-stats" style="width:100%">&#128202; Meine Statistiken</button>
           <button class="btn-secondary" id="btn-logout-start" style="width:100%;font-size:0.88rem;padding:8px 16px">🚪 Abmelden</button>
         </div>
       </div>
@@ -141,17 +141,17 @@
         <div class="progress-bar" id="progress-bar" style="width:0%"></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <div class="progress-text" id="progress-text" style="margin-bottom:0">Question 1 of 30</div>
-        <button class="btn-secondary" id="btn-quiz-home" style="font-size:0.8rem;padding:5px 12px">&#8962; Home</button>
+        <div class="progress-text" id="progress-text" style="margin-bottom:0">Frage 1 von 30</div>
+        <button class="btn-secondary" id="btn-quiz-home" style="font-size:0.8rem;padding:5px 12px">&#8962; Start</button>
       </div>
       <div class="card">
         <div class="question-text" id="question-text"></div>
         <div class="options" id="options"></div>
         <div class="feedback" id="feedback"></div>
         <div class="btn-row">
-          <button class="btn-secondary" id="btn-back" disabled>← Back</button>
-          <button class="btn-secondary" id="btn-submit" disabled>Check Answer</button>
-          <button class="btn-primary" id="btn-next" disabled>Next</button>
+          <button class="btn-secondary" id="btn-back" disabled>← Zurück</button>
+          <button class="btn-secondary" id="btn-submit" disabled>Antwort prüfen</button>
+          <button class="btn-primary" id="btn-next" disabled>Weiter</button>
         </div>
       </div>
     </div>
@@ -162,15 +162,15 @@
     <div class="container">
       <div class="card" style="margin-bottom:16px;padding:20px 24px">
         <div class="browse-header">
-          <button class="btn-secondary" id="btn-browse-back" style="padding:7px 16px;font-size:0.9rem">&#8592; Back</button>
-          <h2>Browse Questions &amp; Answers</h2>
+          <button class="btn-secondary" id="btn-browse-back" style="padding:7px 16px;font-size:0.9rem">&#8592; Zurück</button>
+          <h2>Fragen &amp; Antworten durchsuchen</h2>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:14px">
-          <input class="search-input" id="browse-search" type="text" placeholder="Search questions or answers..." style="margin-bottom:0;flex:1"/>
-          <button class="btn-primary" id="btn-browse-search" style="white-space:nowrap;padding:10px 20px">Search</button>
+          <input class="search-input" id="browse-search" type="text" placeholder="Fragen oder Antworten suchen..." style="margin-bottom:0;flex:1"/>
+          <button class="btn-primary" id="btn-browse-search" style="white-space:nowrap;padding:10px 20px">Suchen</button>
         </div>
         <button class="filter-toggle" id="filter-toggle-browse-cat" style="margin-bottom:0">
-          <span>Filter by Category <span class="active-filters-hint" id="filter-hint-browse-cat"></span></span>
+          <span>Nach Kategorie filtern <span class="active-filters-hint" id="filter-hint-browse-cat"></span></span>
           <span class="filter-chevron" id="filter-chevron-browse-cat">&#9660;</span>
         </button>
         <div class="filter-panel" id="filter-panel-browse-cat" style="margin-bottom:12px">
@@ -193,14 +193,14 @@
         <div class="score-pct" id="score-pct"></div>
         <div class="score-msg" id="score-msg"></div>
         <div class="btn-row" style="justify-content:center">
-          <button class="btn-secondary" id="btn-review">Review Answers</button>
-          <button class="btn-primary" id="btn-new-quiz">&#8962; New Quiz</button>
+          <button class="btn-secondary" id="btn-review">Antworten überprüfen</button>
+          <button class="btn-primary" id="btn-new-quiz">&#8962; Neues Quiz</button>
         </div>
         <div class="review-tabs" id="review-tabs">
           <div class="tab-bar">
-            <button class="tab-btn active" data-tab="all">All</button>
-            <button class="tab-btn" data-tab="correct">Correct</button>
-            <button class="tab-btn" data-tab="wrong">Wrong</button>
+            <button class="tab-btn active" data-tab="all">Alle</button>
+            <button class="tab-btn" data-tab="correct">Richtig</button>
+            <button class="tab-btn" data-tab="wrong">Falsch</button>
           </div>
           <div class="tab-content active" id="tab-all"></div>
           <div class="tab-content" id="tab-correct"></div>
@@ -215,20 +215,20 @@
     <div class="container stats-screen-inner">
       <div class="card">
         <div class="stats-card-header">
-          <button class="btn-secondary" id="btn-stats-back" style="padding:7px 16px;font-size:0.9rem">&#8592; Back</button>
-          <h2>My Statistics</h2>
+          <button class="btn-secondary" id="btn-stats-back" style="padding:7px 16px;font-size:0.9rem">&#8592; Zurück</button>
+          <h2>Meine Statistiken</h2>
         </div>
-        <div id="stats-loading" class="stats-empty">Loading…</div>
+        <div id="stats-loading" class="stats-empty">Lädt…</div>
         <div id="stats-content" class="hidden">
           <p class="stats-total-label" id="stats-total"></p>
           <div id="stats-table"></div>
         </div>
         <div id="stats-empty" class="stats-empty hidden">
-          No answers recorded yet. Start a quiz to build your statistics.
+          Noch keine Antworten gespeichert. Starte ein Quiz, um deine Statistik aufzubauen.
         </div>
       </div>
       <div class="card">
-        <p class="stats-hint">💡 Tip: Focus on categories with low percentages.</p>
+        <p class="stats-hint">💡 Tipp: Fokussiere dich auf Kategorien mit niedrigen Prozentzahlen.</p>
       </div>
     </div>
   </div>

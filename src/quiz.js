@@ -40,7 +40,7 @@ export function renderQuestion(user) {
   document.getElementById('progress-bar').style.width =
     ((currentIndex / sessionCount) * 100) + '%';
   document.getElementById('progress-text').textContent =
-    `Question ${currentIndex + 1} of ${sessionCount}`;
+    `Frage ${currentIndex + 1} von ${sessionCount}`;
 
   // Question text
   const qTextEl = document.getElementById('question-text');
@@ -48,7 +48,7 @@ export function renderQuestion(user) {
   if (isMulti) {
     const badge = document.createElement('span');
     badge.className = 'multi-hint';
-    badge.textContent = `Select ${correctCount}`;
+    badge.textContent = `${correctCount} auswählen`;
     qTextEl.appendChild(badge);
   }
 
@@ -84,12 +84,12 @@ export function renderQuestion(user) {
     });
     document.getElementById('btn-submit').style.display = 'none';
     document.getElementById('btn-next').disabled = false;
-    document.getElementById('btn-next').textContent = isLast ? 'Finish Quiz' : 'Next';
+    document.getElementById('btn-next').textContent = isLast ? 'Quiz beenden' : 'Weiter';
   } else {
     document.getElementById('btn-submit').style.display = '';
     document.getElementById('btn-submit').disabled = true;
     document.getElementById('btn-next').disabled = true;
-    document.getElementById('btn-next').textContent = isLast ? 'See Results' : 'Next';
+    document.getElementById('btn-next').textContent = isLast ? 'Ergebnis anzeigen' : 'Weiter';
 
     // Restore answered state when navigating back
     if (currentIndex < history.length) {
@@ -255,17 +255,17 @@ function showResults() {
   document.getElementById('score-pct').textContent = pct + '%';
 
   const msgs = [
-    [85, 'Excellent! You would pass the PSM I exam.'],
-    [70, 'Good progress! Keep studying to reach the 85% passing threshold.'],
-    [50, 'Decent start. Review the missed questions and try again.'],
-    [0,  'Keep studying! Review the Scrum Guide and practice more.']
+    [85, 'Ausgezeichnet! Du würdest die PSM I Prüfung bestehen.'],
+    [70, 'Guter Fortschritt! Lerne weiter, um die 85%-Bestehensgrenze zu erreichen.'],
+    [50, 'Guter Anfang. Überprüfe die verpassten Fragen und versuche es erneut.'],
+    [0,  'Lerne weiter! Lies den Scrum Guide und übe mehr.']
   ];
   document.getElementById('score-msg').textContent =
     msgs.find(([threshold]) => pct >= threshold)[1];
 
   // Reset review state
   document.getElementById('review-tabs').classList.remove('show');
-  document.getElementById('btn-review').textContent = 'Review Answers';
+  document.getElementById('btn-review').textContent = 'Antworten überprüfen';
 }
 
 export function toggleReview() {
@@ -286,18 +286,18 @@ export function toggleReview() {
     history.map((e, i) => buildReviewCard(e, i, mode)).join('');
   document.getElementById('tab-correct').innerHTML = correctEntries.length
     ? correctEntries.map((e, i) => buildReviewCard(e, i, mode)).join('')
-    : "<div class='empty-tab'>No correct answers yet.</div>";
+    : "<div class='empty-tab'>Noch keine richtigen Antworten.</div>";
   document.getElementById('tab-wrong').innerHTML = wrongEntries.length
     ? wrongEntries.map((e, i) => buildReviewCard(e, i, mode)).join('')
-    : "<div class='empty-tab'>No wrong answers — perfect score!</div>";
+    : "<div class='empty-tab'>Keine falschen Antworten — perfekte Punktzahl!</div>";
 
-  document.querySelector('[data-tab="all"]').textContent    = `All (${history.length})`;
-  document.querySelector('[data-tab="correct"]').textContent = `Correct (${correctEntries.length})`;
-  document.querySelector('[data-tab="wrong"]').textContent   = `Wrong (${wrongEntries.length})`;
+  document.querySelector('[data-tab="all"]').textContent    = `Alle (${history.length})`;
+  document.querySelector('[data-tab="correct"]').textContent = `Richtig (${correctEntries.length})`;
+  document.querySelector('[data-tab="wrong"]').textContent   = `Falsch (${wrongEntries.length})`;
 
   tabsEl.classList.add('show');
   switchTab('all');
-  btn.textContent = 'Hide Review';
+  btn.textContent = 'Überprüfung ausblenden';
 }
 
 export function switchTab(name) {
@@ -359,11 +359,11 @@ function renderFeedback(fb, opts, selectedIndices, isCorrect, explanation) {
 
   fb.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
   if (isCorrect) {
-    fb.innerHTML = '<strong>Correct!</strong>';
+    fb.innerHTML = '<strong>Richtig!</strong>';
   } else {
-    fb.innerHTML = `<strong>Incorrect.</strong> Correct answer${correctOpts.length > 1 ? 's' : ''}: ${correctLabels}`;
+    fb.innerHTML = `<strong>Falsch.</strong> Richtige Antwort${correctOpts.length > 1 ? 'en' : ''}: ${correctLabels}`;
   }
   if (explanation) {
-    fb.innerHTML += `<div class="explanation"><div class="explanation-label">Why?</div>${explanation}</div>`;
+    fb.innerHTML += `<div class="explanation"><div class="explanation-label">Warum?</div>${explanation}</div>`;
   }
 }

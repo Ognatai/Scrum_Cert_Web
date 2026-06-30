@@ -56,7 +56,7 @@ function buildCategoryFilter() {
   document.getElementById('range-to').value = ALL_QUESTIONS.length;
   document.getElementById('range-from').max = ALL_QUESTIONS.length;
   document.getElementById('total-q-count').textContent = ALL_QUESTIONS.length;
-  document.getElementById('count-of-label').textContent = `of ${ALL_QUESTIONS.length}`;
+  document.getElementById('count-of-label').textContent = `von ${ALL_QUESTIONS.length}`;
 }
 
 function updateStartScreenState() {
@@ -67,7 +67,7 @@ function updateStartScreenState() {
     ? ALL_QUESTIONS.filter(q => selectedCats.has(q.category)).length
     : ALL_QUESTIONS.length;
 
-  document.getElementById('count-of-label').textContent = `of ${available}`;
+  document.getElementById('count-of-label').textContent = `von ${available}`;
   document.getElementById('filter-hint-cat').textContent =
     hasCats ? `· ${selectedCats.size} selected` : '';
   document.getElementById('range-error').textContent = '';
@@ -90,7 +90,7 @@ function startQuiz(mode) {
 
   const count = parseInt(document.getElementById('range-count').value, 10);
   if (isNaN(count) || count < 1) {
-    errEl.textContent = 'Please enter a valid count.';
+    errEl.textContent = 'Bitte gib eine gültige Anzahl ein.';
     return;
   }
 
@@ -98,25 +98,25 @@ function startQuiz(mode) {
   if (selectedCats.size > 0) {
     pool = ALL_QUESTIONS.filter(q => selectedCats.has(q.category));
     if (pool.length === 0) {
-      errEl.textContent = 'No questions found for the selected categories.';
+      errEl.textContent = 'Keine Fragen für die ausgewählten Kategorien gefunden.';
       return;
     }
   } else {
     const from = parseInt(document.getElementById('range-from').value, 10);
     const to   = parseInt(document.getElementById('range-to').value, 10);
     if (isNaN(from) || isNaN(to)) {
-      errEl.textContent = 'Please fill in From and To, or select a category.';
+      errEl.textContent = 'Bitte Von und Bis ausfüllen oder eine Kategorie auswählen.';
       return;
     }
     if (from < 1 || to > ALL_QUESTIONS.length || from > to) {
-      errEl.textContent = `Q# must be between 1 and ${ALL_QUESTIONS.length}, and From ≤ To.`;
+      errEl.textContent = `F# muss zwischen 1 und ${ALL_QUESTIONS.length} liegen, und Von ≤ Bis.`;
       return;
     }
     pool = ALL_QUESTIONS.slice(from - 1, to);
   }
 
   if (count > pool.length) {
-    errEl.textContent = `Count must be at most ${pool.length} (available in this selection).`;
+    errEl.textContent = `Anzahl darf maximal ${pool.length} sein (in dieser Auswahl verfügbar).`;
     return;
   }
 
@@ -219,7 +219,7 @@ async function init() {
 
   // Quiz screen
   document.getElementById('btn-quiz-home').addEventListener('click', () => {
-    if (confirm('Leave the quiz? Your progress will be lost.')) {
+    if (confirm('Quiz verlassen? Dein Fortschritt geht verloren.')) {
       stopQuizTimer();
       show('start-screen');
     }
