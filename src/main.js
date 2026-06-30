@@ -16,7 +16,8 @@ import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from
 let ALL_QUESTIONS = [];
 let currentUser = null;
 let selectedCats = new Set();
-let inApp = false;  // true once the user has entered the app
+let inApp = false;
+let quizOrigin = 'start'; // 'start' | 'fehlerPool'
 
 // ─── Load questions ───────────────────────────────────────────────────────────
 async function loadQuestions() {
@@ -88,6 +89,7 @@ function toggleFilter(name) {
 
 // ─── Start quiz ───────────────────────────────────────────────────────────────
 function startQuiz(mode) {
+  quizOrigin = 'start';
   const errEl = document.getElementById('range-error');
   errEl.textContent = '';
 
@@ -230,6 +232,7 @@ async function init() {
   document.getElementById('btn-fehlerPool-start').addEventListener('click', () => {
     const selected = getSelectedQuestions();
     if (!selected.length) return;
+    quizOrigin = 'fehlerPool';
     initQuiz(shuffle(selected), 'normal');
     renderQuestion(currentUser);
     show('quiz-screen');
@@ -273,6 +276,16 @@ async function init() {
     stopQuizTimer();
     updateFehlerPoolButton();
     show('start-screen');
+  });
+  document.addEventListener('quizResults', () => {
+    const btn = document.getElementById('btn-back-to-fehlerPool');
+    btn.classList.toggle('hidden', quizOrigin !== 'fehlerPool');
+  });
+  document.getElementById('btn-back-to-fehlerPool').addEventListener('click', async () => {
+    const pool = await getFehlerPool(currentUser);
+    initFehlerPool(pool);
+    updateFehlerPoolButton();
+    show('fehlerPool-screen');
   });
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));

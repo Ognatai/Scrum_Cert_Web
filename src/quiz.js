@@ -246,6 +246,7 @@ async function finishTimedQuiz(user) {
 function showResults() {
   document.getElementById('quiz-screen').classList.add('hidden');
   document.getElementById('results-screen').classList.remove('hidden');
+  document.dispatchEvent(new CustomEvent('quizResults'));
 
   const { score, sessionCount, history, mode } = state;
   const pct = Math.round((score / sessionCount) * 100);
