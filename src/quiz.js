@@ -1,5 +1,5 @@
 import { shuffle } from './shuffle.js';
-import { recordAnswer } from './progress.js';
+import { recordAnswer, addToFehlerPool, removeFromFehlerPool } from './progress.js';
 
 // 45 seconds per question (total = count × 45)
 const SECS_PER_QUESTION = 45;
@@ -157,6 +157,9 @@ export async function submitAnswer(user) {
 
   await recordAnswer(user, q, isCorrect);
 
+  if (isCorrect) removeFromFehlerPool(q.id);
+  else           addToFehlerPool(q);
+
   // Apply option styles
   document.querySelectorAll('.option').forEach(div => {
     const i = Number(div.dataset.idx);
@@ -232,6 +235,8 @@ async function finishTimedQuiz(user) {
     if (isCorrect) state.score++;
     state.history.push({ question: q, opts, selected: sel, correct: isCorrect });
     await recordAnswer(user, q, isCorrect);
+    if (isCorrect) removeFromFehlerPool(q.id);
+    else           addToFehlerPool(q);
   }
   showResults();
 }

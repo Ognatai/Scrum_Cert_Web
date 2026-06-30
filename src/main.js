@@ -10,6 +10,7 @@ import { initBrowse, filterBrowse, toggleBrowseCat } from './browse.js';
 import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';
+import { getFehlerPool, getFehlerPoolCount } from './progress.js';
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
@@ -137,10 +138,19 @@ function startQuiz(mode) {
 }
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
+function updateFehlerPoolButton() {
+  const count = getFehlerPoolCount();
+  const btn   = document.getElementById('btn-start-fehlerPool');
+  const badge = document.getElementById('fehler-count-badge');
+  badge.textContent = count;
+  btn.disabled = count === 0;
+}
+
 function enterApp(session) {
   inApp = true;
   currentUser = session?.user ?? null;
   buildCategoryFilter();
+  updateFehlerPoolButton();
 
   const guestBanner = document.getElementById('guest-banner');
   if (!currentUser) {
@@ -206,6 +216,13 @@ async function init() {
     () => startQuiz('normal'));
   document.getElementById('btn-start-timed').addEventListener('click',
     () => startQuiz('timed'));
+  document.getElementById('btn-start-fehlerPool').addEventListener('click', () => {
+    const pool = getFehlerPool();
+    if (!pool.length) return;
+    initQuiz(shuffle(pool), 'normal');
+    renderQuestion(currentUser);
+    show('quiz-screen');
+  });
   document.getElementById('btn-show-browse').addEventListener('click', () => {
     initBrowse(ALL_QUESTIONS);
     show('browse-screen');
@@ -228,6 +245,7 @@ async function init() {
   document.getElementById('btn-quiz-home').addEventListener('click', () => {
     if (confirm('Quiz verlassen? Dein Fortschritt geht verloren.')) {
       stopQuizTimer();
+      updateFehlerPoolButton();
       show('start-screen');
     }
   });
@@ -242,6 +260,7 @@ async function init() {
   document.getElementById('btn-review').addEventListener('click', toggleReview);
   document.getElementById('btn-new-quiz').addEventListener('click', () => {
     stopQuizTimer();
+    updateFehlerPoolButton();
     show('start-screen');
   });
   document.querySelectorAll('.tab-btn').forEach(btn => {

@@ -71,3 +71,35 @@ export function getLocalStats() {
 export function getTotalLocalAnswers() {
   return loadLocal().length;
 }
+
+// ─── Fehlerpool ──────────────────────────────────────────────────────────────
+
+const POOL_KEY = 'scrumfit_fehlerPool';
+
+function loadPool() {
+  try { return JSON.parse(localStorage.getItem(POOL_KEY) || '[]'); } catch { return []; }
+}
+
+function savePool(pool) {
+  localStorage.setItem(POOL_KEY, JSON.stringify(pool));
+}
+
+export function addToFehlerPool(question) {
+  const pool = loadPool();
+  if (!pool.some(q => q.id === question.id)) {
+    pool.push(question);
+    savePool(pool);
+  }
+}
+
+export function removeFromFehlerPool(questionId) {
+  savePool(loadPool().filter(q => q.id !== questionId));
+}
+
+export function getFehlerPool() {
+  return loadPool();
+}
+
+export function getFehlerPoolCount() {
+  return loadPool().length;
+}
