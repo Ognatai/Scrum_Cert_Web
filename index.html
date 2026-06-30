@@ -116,7 +116,7 @@
         <!-- Aktionen -->
         <div class="start-actions">
           <div class="mode-select" style="margin-bottom:0">
-            <button class="mode-btn btn-secondary" id="btn-start-normal">
+            <button class="mode-btn btn-primary" id="btn-start-normal">
               <div class="mode-title">Normal</div>
               <div class="mode-desc">Antwort sofort prüfen · Erklärungen sichtbar</div>
             </button>
@@ -125,14 +125,9 @@
               <div class="mode-desc">45 Sek / Frage · Alle am Ende abgeben · Keine Erklärungen</div>
             </button>
           </div>
-          <div class="fehler-row">
-            <button class="btn-secondary fehler-btn-main" id="btn-start-fehlerPool" disabled>
-              🔁 Fehlerpool üben &nbsp;<span id="fehler-count-badge" class="fehler-badge">0</span>
-            </button>
-            <button class="btn-secondary fehler-btn-view" id="btn-view-fehlerPool" disabled title="Fehlerpool anzeigen">
-              📋
-            </button>
-          </div>
+          <button class="btn-secondary" id="btn-open-fehlerPool" style="width:100%" disabled>
+            🔁 Fehlerpool &nbsp;<span id="fehler-count-badge" class="fehler-badge">0</span>
+          </button>
           <button class="btn-secondary" id="btn-show-browse" style="width:100%">&#128270; Alle Fragen &amp; Antworten durchsuchen</button>
           <button class="btn-secondary" id="btn-show-stats" style="width:100%">&#128202; Meine Statistiken</button>
           <button class="btn-secondary" id="btn-account" style="width:100%;font-size:0.88rem;padding:8px 16px">👤 Account verwalten</button>
@@ -240,6 +235,41 @@
       </div>
       <div class="card">
         <p class="stats-hint">💡 Tipp: Fokussiere dich auf Kategorien mit niedrigen Prozentzahlen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Fehlerpool Screen ===== -->
+  <div id="fehlerPool-screen" class="hidden">
+    <div class="container">
+      <div class="card" style="padding:28px 24px">
+        <div class="browse-header" style="margin-bottom:20px">
+          <button class="btn-secondary" id="btn-fehlerPool-back" style="padding:7px 16px;font-size:0.9rem">&#8592; Zurück</button>
+          <h2>Fehlerpool</h2>
+        </div>
+
+        <div id="fehlerPool-empty" class="stats-empty hidden">
+          Dein Fehlerpool ist leer – beantworte Fragen falsch, um sie hier zu sammeln.
+        </div>
+
+        <div id="fehlerPool-content" class="hidden">
+          <div class="fp-toolbar">
+            <span id="fp-total-label" class="fp-total"></span>
+            <div class="fp-toolbar-actions">
+              <button class="fp-link-btn" id="btn-fp-select-all">Alle auswählen</button>
+              <span style="color:var(--border)">|</span>
+              <button class="fp-link-btn" id="btn-fp-deselect-all">Alle abwählen</button>
+            </div>
+          </div>
+
+          <div id="fehlerPool-list"></div>
+
+          <div style="margin-top:20px">
+            <button class="btn-primary" id="btn-fehlerPool-start" style="width:100%" disabled>
+              Üben starten
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

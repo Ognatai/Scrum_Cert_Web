@@ -571,10 +571,58 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .stats-hint  { font-size: 0.87rem; color: var(--subtext); font-style: italic; }
 .stats-empty { text-align: center; color: var(--subtext); padding: 32px 0; font-size: 0.95rem; }
 
-/* ===== Fehlerpool-Zeile ===== */
-.fehler-row { display: flex; gap: 8px; width: 100%; }
-.fehler-btn-main { flex: 1; }
-.fehler-btn-view { flex-shrink: 0; padding: 10px 14px; font-size: 1rem; }
+/* ===== Fehlerpool Screen ===== */
+.fp-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.fp-total { font-size: 0.9rem; color: var(--subtext); font-weight: 500; }
+.fp-toolbar-actions { display: flex; align-items: center; gap: 8px; }
+.fp-link-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.fp-link-btn:hover { background: var(--light-blue); transform: none; }
+
+.fp-cat-block { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.fp-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--light-blue);
+  cursor: pointer;
+  user-select: none;
+}
+.fp-cat-header label { display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1; font-weight: 700; font-size: 0.92rem; color: var(--navy); }
+.fp-cat-count { font-size: 0.8rem; color: var(--slate); font-weight: 400; margin-left: auto; }
+.fp-cat-chevron { font-size: 0.65rem; color: var(--slate); transition: transform 0.2s; }
+.fp-cat-chevron.open { transform: rotate(180deg); }
+.fp-question-list { padding: 4px 0; }
+.fp-question-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 14px;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.fp-question-item:hover { background: #f8faff; }
+.fp-question-item input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--primary); width: 15px; height: 15px; cursor: pointer; }
+.fp-question-text { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
 
 /* ===== Fehlerpool-Badge ===== */
 .fehler-badge {

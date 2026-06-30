@@ -11,6 +11,7 @@ import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';
 import { getFehlerPool, getFehlerPoolCount } from './progress.js';
+import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from './fehlerPool.js';
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
@@ -25,7 +26,7 @@ async function loadQuestions() {
 
 // ─── Screen management ───────────────────────────────────────────────────────
 function show(id) {
-  ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen']
+  ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen', 'fehlerPool-screen']
     .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
 }
 
@@ -142,8 +143,7 @@ async function updateFehlerPoolButton() {
   const count = await getFehlerPoolCount(currentUser);
   const badge = document.getElementById('fehler-count-badge');
   badge.textContent = count;
-  document.getElementById('btn-start-fehlerPool').disabled = count === 0;
-  document.getElementById('btn-view-fehlerPool').disabled  = count === 0;
+  document.getElementById('btn-open-fehlerPool').disabled = count === 0;
 }
 
 function enterApp(session) {
@@ -218,18 +218,21 @@ async function init() {
     () => startQuiz('normal'));
   document.getElementById('btn-start-timed').addEventListener('click',
     () => startQuiz('timed'));
-  document.getElementById('btn-start-fehlerPool').addEventListener('click', async () => {
+  document.getElementById('btn-open-fehlerPool').addEventListener('click', async () => {
     const pool = await getFehlerPool(currentUser);
-    if (!pool.length) return;
-    initQuiz(shuffle(pool), 'normal');
+    initFehlerPool(pool);
+    show('fehlerPool-screen');
+  });
+  document.getElementById('btn-fehlerPool-back').addEventListener('click',
+    () => show('start-screen'));
+  document.getElementById('btn-fp-select-all').addEventListener('click', fpSelectAll);
+  document.getElementById('btn-fp-deselect-all').addEventListener('click', fpDeselectAll);
+  document.getElementById('btn-fehlerPool-start').addEventListener('click', () => {
+    const selected = getSelectedQuestions();
+    if (!selected.length) return;
+    initQuiz(shuffle(selected), 'normal');
     renderQuestion(currentUser);
     show('quiz-screen');
-  });
-  document.getElementById('btn-view-fehlerPool').addEventListener('click', async () => {
-    const pool = await getFehlerPool(currentUser);
-    if (!pool.length) return;
-    initBrowse(pool, 'Fehlerpool');
-    show('browse-screen');
   });
   document.getElementById('btn-show-browse').addEventListener('click', () => {
     initBrowse(ALL_QUESTIONS);
