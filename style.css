@@ -1,17 +1,27 @@
-/* ===== Variables (from old_quiz.html) ===== */
+/* ===== Variables ===== */
 :root {
-  --bg: #f0f4f8;
-  --card: #ffffff;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --correct: #16a34a;
-  --correct-bg: #dcfce7;
-  --wrong: #dc2626;
-  --wrong-bg: #fee2e2;
-  --neutral: #64748b;
-  --border: #e2e8f0;
-  --text: #1e293b;
-  --subtext: #64748b;
+  /* Brand palette */
+  --navy:        #0F172A;   /* Deep Navy   – Header, Nav, Text, Footer */
+  --primary:     #2563EB;   /* Primary Blue – Buttons, Links, Progress  */
+  --primary-dark:#1A4FD0;   /* Darker shade on hover                   */
+  --accent:      #FFC700;   /* Accent Yellow – CTA, Badges, Highlights  */
+  --accent-dark: #E6B200;   /* Darker yellow on hover                   */
+  --light-blue:  #DBEAFE;   /* Light Blue  – Hover, Card BG, Info boxes */
+  --slate:       #64748B;   /* Slate Gray  – Subtext, Placeholders      */
+
+  /* Semantic aliases */
+  --bg:          #F8FAFF;   /* Page background (slight blue tint)        */
+  --card:        #FFFFFF;
+  --text:        #0F172A;   /* = --navy */
+  --subtext:     #64748B;   /* = --slate */
+  --border:      #DBEAFE;   /* = --light-blue */
+  --neutral:     #64748B;
+
+  /* Status colors */
+  --correct:     #16a34a;
+  --correct-bg:  #dcfce7;
+  --wrong:       #dc2626;
+  --wrong-bg:    #fee2e2;
 }
 
 /* ===== Reset ===== */
@@ -41,7 +51,7 @@ header {
 header h1 {
   font-size: 1.7rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--navy);
 }
 header p {
   color: var(--subtext);
@@ -194,8 +204,10 @@ button {
 button:active { transform: scale(0.97); }
 .btn-primary   { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-dark); }
-.btn-secondary { background: var(--border); color: var(--text); }
-.btn-secondary:hover { background: #cbd5e1; }
+.btn-secondary { background: var(--light-blue); color: var(--navy); }
+.btn-secondary:hover { background: #bfdbfe; }
+.btn-cta       { background: var(--accent); color: var(--navy); font-weight: 700; }
+.btn-cta:hover { background: var(--accent-dark); }
 button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 /* ===== Results screen ===== */
@@ -279,11 +291,11 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 /* ===== Start screen ===== */
 #start-screen .card { padding: 40px; }
-.big-title { font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+.big-title { font-size: 2rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
 .tagline { color: var(--subtext); margin-bottom: 28px; font-size: 1rem; }
 .stats { display: flex; gap: 24px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
 .stat { text-align: center; }
-.stat-num   { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+.stat-num   { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
 .stat-label { font-size: 0.82rem; color: var(--subtext); }
 
 .count-row { margin: 22px 0 20px; text-align: center; }
@@ -505,8 +517,8 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   text-align: center;
 }
 .login-logo { font-size: 2.8rem; margin-bottom: 8px; }
-.login-card h1 { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
-.login-subtitle { color: var(--subtext); margin-bottom: 28px; font-size: 0.97rem; }
+.login-card h1 { font-size: 1.8rem; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+.login-subtitle { color: var(--primary); font-weight: 600; margin-bottom: 28px; font-size: 0.97rem; letter-spacing: 0.01em; }
 .login-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; text-align: left; }
 .form-group { margin-bottom: 12px; }
 .form-group input {
@@ -572,8 +584,8 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   min-width: 22px;
   height: 22px;
   border-radius: 99px;
-  background: var(--wrong);
-  color: #fff;
+  background: var(--accent);
+  color: var(--navy);
   font-size: 0.78rem;
   font-weight: 700;
   padding: 0 6px;
@@ -628,6 +640,9 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   text-align: center;
   padding: 20px 16px 28px;
   margin-top: 8px;
+  background: var(--navy);
+  margin: 8px -16px -24px;
+  border-radius: 0;
 }
 .footer-nav {
   display: flex;
@@ -638,7 +653,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .footer-link {
   background: none;
   border: none;
-  color: var(--subtext);
+  color: #94a3b8;
   font-size: 0.82rem;
   padding: 4px 0;
   cursor: pointer;
@@ -647,7 +662,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   text-underline-offset: 3px;
   border-radius: 0;
 }
-.footer-link:hover { color: var(--primary); transform: none; }
+.footer-link:hover { color: var(--accent); transform: none; }
 .footer-link:active { transform: none; }
 
 /* ===== Modal ===== */
