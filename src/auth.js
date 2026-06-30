@@ -29,3 +29,11 @@ export async function getCurrentUser() {
   const { data } = await supabase.auth.getUser();
   return data?.user ?? null;
 }
+
+export async function deleteAccount() {
+  if (!isConfigured) return { error: { message: 'Supabase nicht konfiguriert.' } };
+  const { error } = await supabase.rpc('delete_my_account');
+  if (error) return { error };
+  await supabase.auth.signOut();
+  return { error: null };
+}

@@ -1,4 +1,4 @@
-import { onAuth, signIn, signUp, signOut } from './auth.js';
+import { onAuth, signIn, signUp, signOut, deleteAccount } from './auth.js';
 import {
   initQuiz, renderQuestion, submitAnswer,
   backQuestion, nextQuestion,
@@ -151,6 +151,8 @@ function enterApp(session) {
   currentUser = session?.user ?? null;
   buildCategoryFilter();
   updateFehlerPoolButton();
+
+  document.getElementById('btn-account').style.display = currentUser ? '' : 'none';
 
   const guestBanner = document.getElementById('guest-banner');
   if (!currentUser) {
@@ -310,10 +312,47 @@ async function init() {
     if (e.target === datenschutzOverlay) datenschutzOverlay.classList.add('hidden');
   });
 
+  // Account modal
+  const accountOverlay = document.getElementById('account-overlay');
+  document.getElementById('btn-account').addEventListener('click', () => {
+    document.getElementById('account-email').textContent   = currentUser?.email ?? '–';
+    const created = currentUser?.created_at
+      ? new Date(currentUser.created_at).toLocaleDateString('de-DE')
+      : '–';
+    document.getElementById('account-created').textContent = created;
+    accountOverlay.classList.remove('hidden');
+  });
+  document.getElementById('btn-close-account').addEventListener('click',
+    () => accountOverlay.classList.add('hidden'));
+  accountOverlay.addEventListener('click', e => {
+    if (e.target === accountOverlay) accountOverlay.classList.add('hidden');
+  });
+  document.getElementById('btn-delete-account').addEventListener('click', async () => {
+    const confirmed = confirm(
+      'Account wirklich dauerhaft löschen?\n\nAlle deine Daten (Statistiken, Fehlerpool) werden unwiderruflich gelöscht.'
+    );
+    if (!confirmed) return;
+    const btn = document.getElementById('btn-delete-account');
+    btn.disabled = true;
+    btn.textContent = 'Wird gelöscht…';
+    const { error } = await deleteAccount();
+    if (error) {
+      alert('Fehler beim Löschen: ' + error.message);
+      btn.disabled = false;
+      btn.textContent = 'Account dauerhaft löschen';
+      return;
+    }
+    accountOverlay.classList.add('hidden');
+    inApp = false;
+    currentUser = null;
+    show('login-screen');
+  });
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       impressumOverlay.classList.add('hidden');
       datenschutzOverlay.classList.add('hidden');
+      accountOverlay.classList.add('hidden');
     }
   });
 }

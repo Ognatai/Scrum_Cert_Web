@@ -135,6 +135,7 @@
           </div>
           <button class="btn-secondary" id="btn-show-browse" style="width:100%">&#128270; Alle Fragen &amp; Antworten durchsuchen</button>
           <button class="btn-secondary" id="btn-show-stats" style="width:100%">&#128202; Meine Statistiken</button>
+          <button class="btn-secondary" id="btn-account" style="width:100%;font-size:0.88rem;padding:8px 16px">👤 Account verwalten</button>
           <button class="btn-secondary" id="btn-logout-start" style="width:100%;font-size:0.88rem;padding:8px 16px">🚪 Abmelden</button>
         </div>
       </div>
@@ -250,6 +251,34 @@
       <button class="footer-link" id="btn-datenschutz">Datenschutz</button>
     </nav>
   </footer>
+
+  <!-- ===== Account Modal ===== -->
+  <div id="account-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Account verwalten</h2>
+        <button class="modal-close" id="btn-close-account" aria-label="Schließen">&#10005;</button>
+      </div>
+      <div class="modal-body">
+        <div class="account-info">
+          <div class="account-row">
+            <span class="account-label">E-Mail</span>
+            <span id="account-email" class="account-value">–</span>
+          </div>
+          <div class="account-row">
+            <span class="account-label">Mitglied seit</span>
+            <span id="account-created" class="account-value">–</span>
+          </div>
+        </div>
+
+        <div class="account-danger-zone">
+          <h3>Gefahrenzone</h3>
+          <p>Das Löschen deines Accounts entfernt alle deine Daten dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+          <button id="btn-delete-account" class="btn-danger">Account dauerhaft löschen</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Impressum Modal ===== -->
   <div id="impressum-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
