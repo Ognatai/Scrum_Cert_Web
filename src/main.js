@@ -13,7 +13,8 @@ import { mountLegal } from './legal.js';
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
-let selectedCats = new Set();  // category filter on start screen
+let selectedCats = new Set();
+let inApp = false;  // true once the user has entered the app
 
 // ─── Load questions ───────────────────────────────────────────────────────────
 async function loadQuestions() {
@@ -137,6 +138,7 @@ function startQuiz(mode) {
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 function enterApp(session) {
+  inApp = true;
   currentUser = session?.user ?? null;
   buildCategoryFilter();
 
@@ -186,8 +188,12 @@ async function init() {
   document.getElementById('btn-guest').addEventListener('click', () => enterApp(null));
 
   onAuth((session, event) => {
-    // Only navigate to start on initial load or explicit sign-in, not on token refresh
-    if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') return;
+    if (event === 'SIGNED_OUT') {
+      inApp = false;
+      show('login-screen');
+      return;
+    }
+    if (inApp) return; // Already in app — ignore all background auth events
     if (session) enterApp(session);
   });
 
@@ -210,6 +216,7 @@ async function init() {
   });
   document.getElementById('btn-logout-start').addEventListener('click', async () => {
     await signOut();
+    inApp = false;
     currentUser = null;
     show('login-screen');
   });
