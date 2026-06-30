@@ -11,9 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'PSM I Quiz',
+        name: 'ScrumFit',
         short_name: 'Quiz',
-        description: 'PSM I Scrum-Quiz mit Nutzerkonten',
+        description: 'ScrumFit – sprint to success',
         theme_color: '#2563eb',
         background_color: '#f0f4f8',
         display: 'standalone',

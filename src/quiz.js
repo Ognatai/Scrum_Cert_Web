@@ -255,7 +255,7 @@ function showResults() {
   document.getElementById('score-pct').textContent = pct + '%';
 
   const msgs = [
-    [85, 'Ausgezeichnet! Du würdest die PSM I Prüfung bestehen.'],
+    [85, 'Ausgezeichnet! Du würdest die Prüfung bestehen.'],
     [70, 'Guter Fortschritt! Lerne weiter, um die 85%-Bestehensgrenze zu erreichen.'],
     [50, 'Guter Anfang. Überprüfe die verpassten Fragen und versuche es erneut.'],
     [0,  'Lerne weiter! Lies den Scrum Guide und übe mehr.']
