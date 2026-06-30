@@ -291,9 +291,11 @@ export function toggleReview() {
     ? wrongEntries.map((e, i) => buildReviewCard(e, i, mode)).join('')
     : "<div class='empty-tab'>Keine falschen Antworten — perfekte Punktzahl!</div>";
 
-  document.querySelector('[data-tab="all"]').textContent    = `Alle (${history.length})`;
-  document.querySelector('[data-tab="correct"]').textContent = `Richtig (${correctEntries.length})`;
-  document.querySelector('[data-tab="wrong"]').textContent   = `Falsch (${wrongEntries.length})`;
+  document.querySelector('[data-tab="all"]').textContent      = `Alle (${history.length})`;
+  document.querySelector('[data-tab="correct"]').textContent  = `Richtig (${correctEntries.length})`;
+  document.querySelector('[data-tab="wrong"]').textContent    = `Falsch (${wrongEntries.length})`;
+
+  document.getElementById('tab-category').innerHTML = buildCategoryTab(history, mode);
 
   tabsEl.classList.add('show');
   switchTab('all');
@@ -332,6 +334,50 @@ function buildReviewCard(entry, i, mode) {
     <div class="review-options">${optsHtml}</div>
     ${expHtml}
   </div>`;
+}
+
+function buildCategoryTab(history, mode) {
+  // Group entries by category
+  const groups = {};
+  history.forEach((entry, i) => {
+    const cat = entry.question.category || 'Sonstige';
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push({ entry, i });
+  });
+
+  return Object.keys(groups).sort().map(cat => {
+    const items = groups[cat];
+    const correct = items.filter(({ entry }) => entry.correct).length;
+    const total   = items.length;
+    const pct     = Math.round((correct / total) * 100);
+    const color   = pct >= 70 ? 'var(--correct)' : pct >= 40 ? 'var(--primary)' : 'var(--wrong)';
+    const id      = 'cat-body-' + cat.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+
+    const cardsHtml = items
+      .map(({ entry, i }) => buildReviewCard(entry, i, mode))
+      .join('');
+
+    return `
+      <div class="cat-group">
+        <div class="cat-group-header" onclick="
+          const b = document.getElementById('${id}');
+          const c = this.querySelector('.cat-group-chevron');
+          b.classList.toggle('hidden');
+          c.classList.toggle('open');
+          this.classList.toggle('collapsed');
+        ">
+          <span class="cat-group-name">${cat}</span>
+          <span class="cat-group-meta">
+            <span class="cat-group-score" style="color:${color}">${correct}/${total} (${pct}%)</span>
+            <div class="cat-group-bar-wrap">
+              <div class="cat-group-bar" style="width:${pct}%;background:${color}"></div>
+            </div>
+            <span class="cat-group-chevron open">&#9660;</span>
+          </span>
+        </div>
+        <div class="cat-group-body" id="${id}">${cardsHtml}</div>
+      </div>`;
+  }).join('');
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
