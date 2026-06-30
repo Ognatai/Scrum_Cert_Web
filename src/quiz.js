@@ -157,8 +157,8 @@ export async function submitAnswer(user) {
 
   await recordAnswer(user, q, isCorrect);
 
-  if (isCorrect) removeFromFehlerPool(q.id);
-  else           addToFehlerPool(q);
+  if (isCorrect) await removeFromFehlerPool(user, q.id);
+  else           await addToFehlerPool(user, q);
 
   // Apply option styles
   document.querySelectorAll('.option').forEach(div => {
@@ -235,8 +235,8 @@ async function finishTimedQuiz(user) {
     if (isCorrect) state.score++;
     state.history.push({ question: q, opts, selected: sel, correct: isCorrect });
     await recordAnswer(user, q, isCorrect);
-    if (isCorrect) removeFromFehlerPool(q.id);
-    else           addToFehlerPool(q);
+    if (isCorrect) await removeFromFehlerPool(user, q.id);
+    else           await addToFehlerPool(user, q);
   }
   showResults();
 }

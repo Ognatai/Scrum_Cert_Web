@@ -84,7 +84,14 @@ function savePool(pool) {
   localStorage.setItem(POOL_KEY, JSON.stringify(pool));
 }
 
-export function addToFehlerPool(question) {
+export async function addToFehlerPool(user, question) {
+  if (isConfigured && user) {
+    await supabase.from('mistake_pool').upsert(
+      { user_id: user.id, question_id: question.id, question_data: question },
+      { onConflict: 'user_id,question_id' }
+    );
+    return;
+  }
   const pool = loadPool();
   if (!pool.some(q => q.id === question.id)) {
     pool.push(question);
@@ -92,14 +99,33 @@ export function addToFehlerPool(question) {
   }
 }
 
-export function removeFromFehlerPool(questionId) {
+export async function removeFromFehlerPool(user, questionId) {
+  if (isConfigured && user) {
+    await supabase.from('mistake_pool')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('question_id', questionId);
+    return;
+  }
   savePool(loadPool().filter(q => q.id !== questionId));
 }
 
-export function getFehlerPool() {
+export async function getFehlerPool(user) {
+  if (isConfigured && user) {
+    const { data } = await supabase.from('mistake_pool')
+      .select('question_data')
+      .eq('user_id', user.id);
+    return (data ?? []).map(r => r.question_data);
+  }
   return loadPool();
 }
 
-export function getFehlerPoolCount() {
+export async function getFehlerPoolCount(user) {
+  if (isConfigured && user) {
+    const { count } = await supabase.from('mistake_pool')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id);
+    return count ?? 0;
+  }
   return loadPool().length;
 }

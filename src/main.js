@@ -138,8 +138,8 @@ function startQuiz(mode) {
 }
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
-function updateFehlerPoolButton() {
-  const count = getFehlerPoolCount();
+async function updateFehlerPoolButton() {
+  const count = await getFehlerPoolCount(currentUser);
   const btn   = document.getElementById('btn-start-fehlerPool');
   const badge = document.getElementById('fehler-count-badge');
   badge.textContent = count;
@@ -216,8 +216,8 @@ async function init() {
     () => startQuiz('normal'));
   document.getElementById('btn-start-timed').addEventListener('click',
     () => startQuiz('timed'));
-  document.getElementById('btn-start-fehlerPool').addEventListener('click', () => {
-    const pool = getFehlerPool();
+  document.getElementById('btn-start-fehlerPool').addEventListener('click', async () => {
+    const pool = await getFehlerPool(currentUser);
     if (!pool.length) return;
     initQuiz(shuffle(pool), 'normal');
     renderQuestion(currentUser);
