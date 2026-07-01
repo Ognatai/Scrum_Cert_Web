@@ -41,7 +41,7 @@ body {
 
 /* All screens fill remaining space so footer sticks to bottom */
 #login-screen, #start-screen, #quiz-screen, #browse-screen,
-#results-screen, #stats-screen, #fehlerPool-screen { flex: 1; }
+#results-screen, #stats-screen, #fehlerPool-screen, #favorites-screen { flex: 1; }
 
 .container {
   max-width: 760px;
