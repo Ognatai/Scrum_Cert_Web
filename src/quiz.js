@@ -187,6 +187,8 @@ export function backQuestion(user) {
 export function nextQuestion(user) {
   if (!state) return;
   if (state.currentIndex === state.sessionCount - 1) {
+    const btn = document.getElementById('btn-next');
+    btn.disabled = true;
     if (state.mode === 'timed') finishTimedQuiz(user);
     else showResults();
     return;
@@ -225,7 +227,12 @@ function updateTimerDisplay() {
 }
 
 async function finishTimedQuiz(user) {
+  if (state.finishing) return;
+  state.finishing = true;
   stopQuizTimer();
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Wird ausgewertet…';
   document.getElementById('timer').classList.add('hidden');
   state.history = [];
   state.score = 0;
