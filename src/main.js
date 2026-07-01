@@ -15,6 +15,19 @@ import { getFehlerPool, getFehlerPoolCount, recordQuizResult, getFavoriteIds, re
 import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from './fehlerPool.js';
 import { initFavorites, getFavSelectedQuestions, favSelectAll, favDeselectAll } from './favorites.js';
 
+function translateAuthError(msg) {
+  if (!msg) return 'Unbekannter Fehler.';
+  const m = msg.toLowerCase();
+  if (m.includes('missing') && (m.includes('email') || m.includes('phone'))) return 'Bitte E-Mail-Adresse eingeben.';
+  if (m.includes('invalid login credentials') || m.includes('invalid email or password')) return 'E-Mail oder Passwort falsch.';
+  if (m.includes('email not confirmed')) return 'E-Mail-Adresse noch nicht bestätigt.';
+  if (m.includes('user already registered')) return 'Diese E-Mail-Adresse ist bereits registriert.';
+  if (m.includes('password should be at least')) return 'Passwort muss mindestens 6 Zeichen lang sein.';
+  if (m.includes('unable to validate email')) return 'Ungültige E-Mail-Adresse.';
+  if (m.includes('rate limit')) return 'Zu viele Versuche. Bitte kurz warten.';
+  return msg;
+}
+
 let ALL_QUESTIONS = [];
 let currentUser = null;
 let selectedCats = new Set();
@@ -196,7 +209,7 @@ async function init() {
     const errEl    = document.getElementById('login-error');
     errEl.textContent = '';
     const { error } = await signIn(email, password);
-    if (error) errEl.textContent = error.message;
+    if (error) errEl.textContent = translateAuthError(error.message);
   });
   document.getElementById('btn-register').addEventListener('click', async () => {
     const email    = document.getElementById('register-email').value.trim();
@@ -206,8 +219,8 @@ async function init() {
     errEl.textContent = '';
     okEl.textContent  = '';
     const { error } = await signUp(email, password);
-    if (error) errEl.textContent = error.message;
-    else okEl.textContent = 'Account created! Please confirm your e-mail.';
+    if (error) errEl.textContent = translateAuthError(error.message);
+    else okEl.textContent = 'Account erstellt! Bitte bestätige deine E-Mail.';
   });
   document.getElementById('btn-guest').addEventListener('click', () => enterApp(null));
 
