@@ -10,6 +10,9 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        navigateFallbackDenylist: [/\.pdf$/]
+      },
       manifest: {
         name: 'ScrumFit',
         short_name: 'Quiz',
