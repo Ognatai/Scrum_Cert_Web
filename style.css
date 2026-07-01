@@ -690,7 +690,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   cursor: pointer;
   user-select: none;
 }
-.fp-cat-header label { display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1; font-weight: 700; font-size: 0.92rem; color: var(--navy); }
+.fp-cat-name { flex: 1; font-weight: 700; font-size: 0.92rem; color: var(--navy); }
 .fp-cat-count { font-size: 0.8rem; color: var(--slate); font-weight: 400; margin-left: auto; }
 .fp-cat-chevron { font-size: 0.65rem; color: var(--slate); transition: transform 0.2s; }
 .fp-cat-chevron.open { transform: rotate(180deg); }

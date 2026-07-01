@@ -57,10 +57,8 @@ function renderList() {
 
     block.innerHTML = `
       <div class="fp-cat-header" id="${catId}">
-        <label onclick="event.stopPropagation()">
-          <input type="checkbox" class="fp-cat-cb" data-cat="${cat}" ${allSelected ? 'checked' : ''}>
-          ${cat}
-        </label>
+        <input type="checkbox" class="fp-cat-cb" data-cat="${cat}" onclick="event.stopPropagation()" ${allSelected ? 'checked' : ''}>
+        <span class="fp-cat-name">${cat}</span>
         <span class="fp-cat-count">${questions.length} Frage${questions.length !== 1 ? 'n' : ''}</span>
         <span class="fp-cat-chevron open">&#9660;</span>
       </div>
