@@ -32,6 +32,7 @@ async function loadQuestions() {
 function show(id) {
   ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen', 'fehlerPool-screen', 'favorites-screen']
     .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 // ─── Start screen: category filter ───────────────────────────────────────────
