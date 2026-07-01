@@ -126,6 +126,8 @@ header p {
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
   user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .option:hover:not(.disabled) {
   border-color: var(--primary);

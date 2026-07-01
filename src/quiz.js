@@ -68,6 +68,7 @@ export function renderQuestion(user) {
     div.dataset.idx = i;
     div.innerHTML = `<div class="letter-badge">${letter}</div><div class="option-text">${opt.text}</div>`;
     div.addEventListener('click', () => toggleOption(div, i));
+    div.addEventListener('touchend', e => { e.preventDefault(); toggleOption(div, i); });
     container.appendChild(div);
   });
 
