@@ -152,7 +152,8 @@ function enterApp(session) {
   buildCategoryFilter();
   updateFehlerPoolButton();
 
-  document.getElementById('btn-account').style.display = currentUser ? '' : 'none';
+  document.getElementById('btn-account').style.display    = currentUser ? '' : 'none';
+  document.getElementById('btn-show-stats').style.display = currentUser ? '' : 'none';
 
   const guestBanner = document.getElementById('guest-banner');
   if (!currentUser) {
