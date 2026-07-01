@@ -295,7 +295,7 @@ export function toggleReview() {
 
   if (tabsEl.classList.contains('show')) {
     tabsEl.classList.remove('show');
-    btn.textContent = 'Review Answers';
+    btn.textContent = 'Antworten überprüfen';
     return;
   }
 
