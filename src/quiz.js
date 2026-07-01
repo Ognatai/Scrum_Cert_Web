@@ -9,7 +9,10 @@ let state = null;
 export function getState() { return state; }
 
 export function initQuiz(questions, mode) {
-  const shuffledQ = shuffle(questions);
+  // Deduplicate by ID before shuffling
+  const seen = new Set();
+  const unique = questions.filter(q => { if (seen.has(q.id)) return false; seen.add(q.id); return true; });
+  const shuffledQ = shuffle(unique);
   state = {
     questions: shuffledQ,
     displayedOptions: shuffledQ.map(q => shuffle(q.options)),
@@ -248,7 +251,8 @@ function showResults() {
   document.getElementById('results-screen').classList.remove('hidden');
   document.dispatchEvent(new CustomEvent('quizResults'));
 
-  const { score, sessionCount, history, mode } = state;
+  const { score, history, mode } = state;
+  const sessionCount = history.length; // always derive from actual answered questions
   const pct = Math.round((score / sessionCount) * 100);
   const color = pct >= 85 ? 'var(--correct)' : pct >= 60 ? 'var(--primary)' : 'var(--wrong)';
 
