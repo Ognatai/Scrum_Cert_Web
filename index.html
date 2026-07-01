@@ -176,6 +176,13 @@
           <input class="search-input" id="browse-search" type="text" placeholder="Fragen oder Antworten suchen..." style="margin-bottom:0;flex:1"/>
           <button class="btn-primary" id="btn-browse-search" style="white-space:nowrap;padding:10px 20px">Suchen</button>
         </div>
+        <button class="filter-toggle" id="filter-toggle-browse-cat" style="margin-bottom:0">
+          <span>Nach Kategorie filtern <span class="active-filters-hint" id="filter-hint-browse-cat"></span></span>
+          <span class="filter-chevron" id="filter-chevron-browse-cat">&#9660;</span>
+        </button>
+        <div class="filter-panel" id="filter-panel-browse-cat" style="margin-bottom:8px">
+          <div class="cat-checkbox-grid" id="browse-cat-filters"></div>
+        </div>
         <div class="browse-count" id="browse-count"></div>
       </div>
       <div id="browse-list"></div>

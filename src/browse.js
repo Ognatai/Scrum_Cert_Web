@@ -1,10 +1,45 @@
 let allQuestions = [];
+let browseCategories = new Set();
 
 export function initBrowse(questions, title) {
   allQuestions = questions;
+  browseCategories = new Set();
 
   const h2 = document.querySelector('#browse-screen h2');
   if (h2) h2.textContent = title ?? 'Fragen & Antworten durchsuchen';
+
+  // Build category checkboxes
+  const catCounts = {};
+  questions.forEach(q => { catCounts[q.category] = (catCounts[q.category] || 0) + 1; });
+
+  const grid = document.getElementById('browse-cat-filters');
+  grid.innerHTML = Object.keys(catCounts).sort().map(cat => `
+    <label class="cat-check-item">
+      <input type="checkbox" value="${cat}" data-cat="${cat}">
+      <span>${cat} <span class="cat-count">(${catCounts[cat]})</span></span>
+    </label>`
+  ).join('');
+
+  grid.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) browseCategories.add(cb.dataset.cat);
+      else browseCategories.delete(cb.dataset.cat);
+      const n = browseCategories.size;
+      document.getElementById('filter-hint-browse-cat').textContent =
+        n > 0 ? `· ${n} ausgewählt` : '';
+      filterBrowse();
+    });
+  });
+
+  // Filter toggle
+  const toggle = document.getElementById('filter-toggle-browse-cat');
+  const panel  = document.getElementById('filter-panel-browse-cat');
+  const chev   = document.getElementById('filter-chevron-browse-cat');
+  toggle.onclick = () => {
+    const open = panel.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    chev.classList.toggle('open', open);
+  };
 
   document.getElementById('browse-search').value = '';
   filterBrowse();
@@ -14,6 +49,8 @@ export function filterBrowse() {
   const term = document.getElementById('browse-search').value.trim().toLowerCase();
 
   const filtered = allQuestions.filter(q => {
+    const matchCat = browseCategories.size === 0 || browseCategories.has(q.category);
+    if (!matchCat) return false;
     if (!term) return true;
     const haystack = (q.question + ' ' + q.options.map(o => o.text).join(' ')).toLowerCase();
     return haystack.includes(term);
