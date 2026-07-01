@@ -72,23 +72,27 @@ async function renderHistory(user) {
     return;
   }
 
-  listEl.innerHTML = history.map(entry => {
-    const pct      = Number(entry.percentage);
-    const color    = pct >= 85 ? 'var(--correct)' : pct >= 60 ? 'var(--primary)' : 'var(--wrong)';
-    const date     = new Date(entry.completed_at).toLocaleDateString('de-DE', {
+  listEl.innerHTML = `
+    <div class="history-header">
+      <span>Datum / Zeit</span>
+      <span>Testart</span>
+      <span>Ergebnis</span>
+      <span>Prozent</span>
+    </div>` +
+  history.map(entry => {
+    const pct       = Number(entry.percentage);
+    const color     = pct >= 85 ? 'var(--correct)' : pct >= 60 ? 'var(--primary)' : 'var(--wrong)';
+    const date      = new Date(entry.completed_at).toLocaleDateString('de-DE', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit'
     });
     const modeLabel = MODE_LABEL[entry.mode] ?? entry.mode;
-    const badge     = entry.pct >= 85 ? '✅' : '';
     return `
       <div class="history-row">
-        <div class="history-date">${date}</div>
-        <div class="history-meta">
-          <span class="history-mode">${modeLabel}</span>
-          <span class="history-score">${entry.score}/${entry.total}</span>
-          <span class="history-pct" style="color:${color};font-weight:700">${pct}% ${pct >= 85 ? '✅' : ''}</span>
-        </div>
+        <span class="history-date">${date}</span>
+        <span class="history-mode">${modeLabel}</span>
+        <span class="history-score">${entry.score} / ${entry.total}</span>
+        <span class="history-pct" style="color:${color}">${pct}%</span>
       </div>`;
   }).join('');
 }
