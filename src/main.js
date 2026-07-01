@@ -426,6 +426,15 @@ async function init() {
       accountOverlay.classList.add('hidden');
     }
   });
+
+  // Scroll-to-top button
+  const scrollTopBtn = document.getElementById('btn-scroll-top');
+  window.addEventListener('scroll', () => {
+    scrollTopBtn.classList.toggle('hidden', window.scrollY < 300);
+  }, { passive: true });
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
 
 init();
