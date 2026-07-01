@@ -769,6 +769,20 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 }
 .cat-group-body.hidden { display: none; }
 
+/* ===== Theorie ===== */
+#theory-screen { flex: 1; }
+.theory-card { padding: 20px 24px !important; display: flex; flex-direction: column; }
+.theory-iframe {
+  width: 100%;
+  flex: 1;
+  min-height: 70vh;
+  border: none;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+.theory-fallback { font-size: 0.8rem; color: var(--slate); margin-top: 10px; text-align: center; }
+.theory-fallback a { color: var(--primary); }
+
 /* ===== Scroll-to-top ===== */
 .btn-scroll-top {
   position: fixed;

@@ -30,7 +30,7 @@ async function loadQuestions() {
 
 // ─── Screen management ───────────────────────────────────────────────────────
 function show(id) {
-  ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen', 'fehlerPool-screen', 'favorites-screen']
+  ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen', 'fehlerPool-screen', 'favorites-screen', 'theory-screen']
     .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -251,6 +251,8 @@ async function init() {
     initBrowse(ALL_QUESTIONS);
     show('browse-screen');
   });
+  document.getElementById('btn-show-theory').addEventListener('click', () => show('theory-screen'));
+  document.getElementById('btn-theory-back').addEventListener('click', () => show('start-screen'));
   document.getElementById('btn-show-stats').addEventListener('click', async () => {
     show('stats-screen');
     await renderStats(currentUser);
