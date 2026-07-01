@@ -257,7 +257,9 @@ async function finishTimedQuiz(user) {
 function showResults() {
   document.getElementById('quiz-screen').classList.add('hidden');
   document.getElementById('results-screen').classList.remove('hidden');
-  document.dispatchEvent(new CustomEvent('quizResults'));
+  document.dispatchEvent(new CustomEvent('quizResults', {
+    detail: { score, total: history.length, pct, mode }
+  }));
 
   const { score, history, mode } = state;
   const sessionCount = history.length; // always derive from actual answered questions

@@ -10,7 +10,7 @@ import { initBrowse, filterBrowse, toggleBrowseCat } from './browse.js';
 import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';
-import { getFehlerPool, getFehlerPoolCount } from './progress.js';
+import { getFehlerPool, getFehlerPoolCount, recordQuizResult } from './progress.js';
 import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from './fehlerPool.js';
 
 let ALL_QUESTIONS = [];
@@ -275,9 +275,12 @@ async function init() {
     updateFehlerPoolButton();
     show('start-screen');
   });
-  document.addEventListener('quizResults', () => {
-    const btn = document.getElementById('btn-back-to-fehlerPool');
-    btn.classList.toggle('hidden', quizOrigin !== 'fehlerPool');
+  document.addEventListener('quizResults', async (e) => {
+    document.getElementById('btn-back-to-fehlerPool')
+      .classList.toggle('hidden', quizOrigin !== 'fehlerPool');
+    const { score, total, pct, mode } = e.detail;
+    const label = quizOrigin === 'fehlerPool' ? 'fehlerPool' : mode;
+    await recordQuizResult(currentUser, score, total, pct, label);
   });
   document.getElementById('btn-back-to-fehlerPool').addEventListener('click', async () => {
     const pool = await getFehlerPool(currentUser);

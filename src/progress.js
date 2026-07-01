@@ -72,6 +72,39 @@ export function getTotalLocalAnswers() {
   return loadLocal().length;
 }
 
+// ─── Quiz-Verlauf ─────────────────────────────────────────────────────────────
+
+const HIST_KEY = 'scrumfit_quiz_history';
+
+function loadLocalHistory() {
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch { return []; }
+}
+
+export async function recordQuizResult(user, score, total, percentage, mode) {
+  const entry = { score, total, percentage, mode, completed_at: new Date().toISOString() };
+  if (isConfigured && user) {
+    await supabase.from('quiz_history').insert({
+      user_id: user.id, score, total, percentage, mode
+    });
+    return;
+  }
+  const hist = loadLocalHistory();
+  hist.unshift(entry);
+  localStorage.setItem(HIST_KEY, JSON.stringify(hist.slice(0, 100)));
+}
+
+export async function getQuizHistory(user) {
+  if (isConfigured && user) {
+    const { data } = await supabase
+      .from('quiz_history')
+      .select('completed_at, score, total, percentage, mode')
+      .order('completed_at', { ascending: false })
+      .limit(50);
+    return data ?? [];
+  }
+  return loadLocalHistory().slice(0, 50);
+}
+
 // ─── Fehlerpool ──────────────────────────────────────────────────────────────
 
 const POOL_KEY = 'scrumfit_fehlerPool';

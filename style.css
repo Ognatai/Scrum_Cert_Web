@@ -577,6 +577,34 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .stats-hint  { font-size: 0.87rem; color: var(--subtext); font-style: italic; }
 .stats-empty { text-align: center; color: var(--subtext); padding: 32px 0; font-size: 0.95rem; }
 
+/* ===== Quiz-Verlauf ===== */
+.history-heading { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+.history-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.history-row:last-child { border-bottom: none; }
+.history-date { font-size: 0.8rem; color: var(--slate); }
+.history-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.history-mode {
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--light-blue);
+  color: var(--navy);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+.history-score { font-size: 0.88rem; color: var(--text); }
+.history-pct   { font-size: 0.95rem; }
+
 /* ===== Fehlerpool Screen ===== */
 .fp-toolbar {
   display: flex;

@@ -1,5 +1,5 @@
 import { supabase, isConfigured } from './supabase.js';
-import { getLocalStats, getTotalLocalAnswers } from './progress.js';
+import { getLocalStats, getTotalLocalAnswers, getQuizHistory } from './progress.js';
 
 export async function getCategoryStats(user) {
   if (isConfigured && user) {
@@ -49,4 +49,46 @@ export async function renderStats(user) {
   }).join('');
 
   contentEl.classList.remove('hidden');
+  await renderHistory(user);
+}
+
+const MODE_LABEL = { normal: 'Normal', timed: 'Zeitlimit', fehlerPool: 'Fehlerpool' };
+
+async function renderHistory(user) {
+  const loadingEl = document.getElementById('history-loading');
+  const listEl    = document.getElementById('history-list');
+  const emptyEl   = document.getElementById('history-empty');
+
+  loadingEl.classList.remove('hidden');
+  listEl.innerHTML = '';
+  emptyEl.classList.add('hidden');
+
+  const history = await getQuizHistory(user);
+
+  loadingEl.classList.add('hidden');
+
+  if (!history.length) {
+    emptyEl.classList.remove('hidden');
+    return;
+  }
+
+  listEl.innerHTML = history.map(entry => {
+    const pct      = Number(entry.percentage);
+    const color    = pct >= 85 ? 'var(--correct)' : pct >= 60 ? 'var(--primary)' : 'var(--wrong)';
+    const date     = new Date(entry.completed_at).toLocaleDateString('de-DE', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+    const modeLabel = MODE_LABEL[entry.mode] ?? entry.mode;
+    const badge     = entry.pct >= 85 ? '✅' : '';
+    return `
+      <div class="history-row">
+        <div class="history-date">${date}</div>
+        <div class="history-meta">
+          <span class="history-mode">${modeLabel}</span>
+          <span class="history-score">${entry.score}/${entry.total}</span>
+          <span class="history-pct" style="color:${color};font-weight:700">${pct}% ${pct >= 85 ? '✅' : ''}</span>
+        </div>
+      </div>`;
+  }).join('');
 }
