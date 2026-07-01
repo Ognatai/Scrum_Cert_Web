@@ -300,11 +300,18 @@
         </div>
 
         <div id="favorites-content" class="hidden">
-          <p id="fav-count-label" class="fp-total" style="margin-bottom:16px"></p>
+          <div class="fp-toolbar">
+            <span id="fav-total-label" class="fp-total"></span>
+            <div class="fp-toolbar-actions">
+              <button class="fp-link-btn" id="btn-fav-select-all">Alle auswählen</button>
+              <span style="color:var(--border)">|</span>
+              <button class="fp-link-btn" id="btn-fav-deselect-all">Alle abwählen</button>
+            </div>
+          </div>
           <div id="favorites-list"></div>
           <div style="margin-top:20px">
-            <button class="btn-primary" id="btn-favorites-start" style="width:100%">
-              Quiz mit allen Favoriten starten
+            <button class="btn-primary" id="btn-favorites-start" style="width:100%" disabled>
+              Quiz starten
             </button>
           </div>
         </div>

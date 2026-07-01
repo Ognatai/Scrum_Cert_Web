@@ -647,22 +647,13 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   border-bottom: 1px solid var(--border);
   margin-bottom: 6px;
 }
-.fav-item {
+.fav-question-row {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
+  gap: 6px;
 }
-.fav-item:last-child { border-bottom: none; }
-.fav-item-text {
-  flex: 1;
-  font-size: 0.88rem;
-  color: var(--text);
-  line-height: 1.45;
-}
-.fav-remove { font-size: 1.25rem; padding-top: 1px; }
+.fav-question-label { flex: 1; margin-bottom: 0; }
+.fav-remove { font-size: 1.1rem; padding-top: 3px; flex-shrink: 0; }
 
 /* ===== Fehlerpool Screen ===== */
 .fp-toolbar {

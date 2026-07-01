@@ -13,7 +13,7 @@ import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';
 import { getFehlerPool, getFehlerPoolCount, recordQuizResult, getFavoriteIds, removeFromFavorites } from './progress.js';
 import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from './fehlerPool.js';
-import { initFavorites, getFavQuestions } from './favorites.js';
+import { initFavorites, getFavSelectedQuestions, favSelectAll, favDeselectAll } from './favorites.js';
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
@@ -277,8 +277,10 @@ async function init() {
   });
   document.getElementById('btn-favorites-back').addEventListener('click',
     () => show('start-screen'));
+  document.getElementById('btn-fav-select-all').addEventListener('click', favSelectAll);
+  document.getElementById('btn-fav-deselect-all').addEventListener('click', favDeselectAll);
   document.getElementById('btn-favorites-start').addEventListener('click', () => {
-    const questions = getFavQuestions();
+    const questions = getFavSelectedQuestions();
     if (!questions.length) return;
     quizOrigin = 'favorites';
     initQuiz(shuffle(questions), 'normal');
