@@ -257,13 +257,14 @@ async function finishTimedQuiz(user) {
 function showResults() {
   document.getElementById('quiz-screen').classList.add('hidden');
   document.getElementById('results-screen').classList.remove('hidden');
-  document.dispatchEvent(new CustomEvent('quizResults', {
-    detail: { score, total: history.length, pct, mode }
-  }));
 
   const { score, history, mode } = state;
-  const sessionCount = history.length; // always derive from actual answered questions
+  const sessionCount = history.length;
   const pct = Math.round((score / sessionCount) * 100);
+
+  document.dispatchEvent(new CustomEvent('quizResults', {
+    detail: { score, total: sessionCount, pct, mode }
+  }));
   const color = pct >= 85 ? 'var(--correct)' : pct >= 60 ? 'var(--primary)' : 'var(--wrong)';
 
   const circle = document.getElementById('score-circle');
