@@ -3,21 +3,24 @@ import {
   initQuiz, renderQuestion, submitAnswer,
   backQuestion, nextQuestion,
   startQuizTimer, stopQuizTimer,
-  toggleReview, switchTab, getState
+  toggleReview, switchTab, getState,
+  setFavIds, toggleCurrentFavorite
 } from './quiz.js';
 import { renderStats } from './stats.js';
 import { initBrowse, filterBrowse, toggleBrowseCat } from './browse.js';
 import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';
-import { getFehlerPool, getFehlerPoolCount, recordQuizResult } from './progress.js';
+import { getFehlerPool, getFehlerPoolCount, recordQuizResult, getFavoriteIds, removeFromFavorites } from './progress.js';
 import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from './fehlerPool.js';
+import { initFavorites, getFavQuestions } from './favorites.js';
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
 let selectedCats = new Set();
 let inApp = false;
-let quizOrigin = 'start'; // 'start' | 'fehlerPool'
+let quizOrigin = 'start'; // 'start' | 'fehlerPool' | 'favorites'
+let favIds = new Set();
 
 // ─── Load questions ───────────────────────────────────────────────────────────
 async function loadQuestions() {
@@ -27,7 +30,7 @@ async function loadQuestions() {
 
 // ─── Screen management ───────────────────────────────────────────────────────
 function show(id) {
-  ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen', 'fehlerPool-screen']
+  ['login-screen', 'start-screen', 'quiz-screen', 'browse-screen', 'results-screen', 'stats-screen', 'fehlerPool-screen', 'favorites-screen']
     .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
 }
 
@@ -146,14 +149,21 @@ async function updateFehlerPoolButton() {
   document.getElementById('fehler-count-badge').textContent = count;
 }
 
-function enterApp(session) {
+async function enterApp(session) {
   inApp = true;
   currentUser = session?.user ?? null;
   buildCategoryFilter();
   updateFehlerPoolButton();
 
-  document.getElementById('btn-account').style.display    = currentUser ? '' : 'none';
-  document.getElementById('btn-show-stats').style.display = currentUser ? '' : 'none';
+  document.getElementById('btn-account').style.display         = currentUser ? '' : 'none';
+  document.getElementById('btn-show-stats').style.display      = currentUser ? '' : 'none';
+  document.getElementById('btn-open-favorites').style.display  = currentUser ? '' : 'none';
+  document.getElementById('btn-star').style.display            = currentUser ? '' : 'none';
+
+  if (currentUser) {
+    favIds = await getFavoriteIds(currentUser);
+    setFavIds(new Set(favIds));
+  }
 
   const guestBanner = document.getElementById('guest-banner');
   if (!currentUser) {
@@ -254,6 +264,38 @@ async function init() {
     show('login-screen');
   });
 
+  // Star / Favoriten
+  document.getElementById('btn-star').addEventListener('click', async () => {
+    if (!currentUser) return;
+    const updatedIds = await toggleCurrentFavorite(currentUser);
+    if (updatedIds) favIds = updatedIds;
+  });
+  document.getElementById('btn-open-favorites').addEventListener('click', async () => {
+    const favQs = ALL_QUESTIONS.filter(q => favIds.has(q.id));
+    initFavorites(favQs);
+    show('favorites-screen');
+  });
+  document.getElementById('btn-favorites-back').addEventListener('click',
+    () => show('start-screen'));
+  document.getElementById('btn-favorites-start').addEventListener('click', () => {
+    const questions = getFavQuestions();
+    if (!questions.length) return;
+    quizOrigin = 'favorites';
+    initQuiz(shuffle(questions), 'normal');
+    renderQuestion(currentUser);
+    show('quiz-screen');
+  });
+  document.getElementById('favorites-list').addEventListener('click', async (e) => {
+    const removeBtn = e.target.closest('.fav-remove');
+    if (!removeBtn || !currentUser) return;
+    const qId = removeBtn.dataset.id;
+    await removeFromFavorites(currentUser, qId);
+    favIds.delete(qId);
+    setFavIds(new Set(favIds));
+    const favQs = ALL_QUESTIONS.filter(q => favIds.has(q.id));
+    initFavorites(favQs);
+  });
+
   // Quiz screen
   document.getElementById('btn-quiz-home').addEventListener('click', () => {
     if (confirm('Quiz verlassen? Dein Fortschritt geht verloren.')) {
@@ -279,8 +321,12 @@ async function init() {
   document.addEventListener('quizResults', async (e) => {
     document.getElementById('btn-back-to-fehlerPool')
       .classList.toggle('hidden', quizOrigin !== 'fehlerPool');
+    document.getElementById('btn-back-to-favorites')
+      .classList.toggle('hidden', quizOrigin !== 'favorites');
     const { score, total, pct, mode } = e.detail;
-    const label = quizOrigin === 'fehlerPool' ? 'fehlerPool' : mode;
+    const label = quizOrigin === 'fehlerPool' ? 'fehlerPool'
+                : quizOrigin === 'favorites'  ? 'favorites'
+                : mode;
     await recordQuizResult(currentUser, score, total, pct, label);
   });
   document.getElementById('btn-back-to-fehlerPool').addEventListener('click', async () => {
@@ -288,6 +334,11 @@ async function init() {
     initFehlerPool(pool);
     updateFehlerPoolButton();
     show('fehlerPool-screen');
+  });
+  document.getElementById('btn-back-to-favorites').addEventListener('click', () => {
+    const favQs = ALL_QUESTIONS.filter(q => favIds.has(q.id));
+    initFavorites(favQs);
+    show('favorites-screen');
   });
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));

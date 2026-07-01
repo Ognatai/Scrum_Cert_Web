@@ -52,7 +52,7 @@ export async function renderStats(user) {
   await renderHistory(user);
 }
 
-const MODE_LABEL = { normal: 'Normal', timed: 'Zeitlimit', fehlerPool: 'Fehlerpool' };
+const MODE_LABEL = { normal: 'Normal', timed: 'Zeitlimit', fehlerPool: 'Fehlerpool', favorites: 'Favoriten' };
 
 async function renderHistory(user) {
   const loadingEl = document.getElementById('history-loading');

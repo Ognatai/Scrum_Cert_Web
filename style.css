@@ -611,6 +611,59 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .history-score { font-size: 0.88rem; color: var(--text); }
 .history-pct   { font-size: 0.88rem; font-weight: 700; }
 
+/* ===== Favoriten ===== */
+.q-star-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.q-star-row .question-text {
+  flex: 1;
+  margin-bottom: 0;
+}
+.btn-star {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--slate);
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+.btn-star:hover  { color: var(--accent); transform: scale(1.2); }
+.btn-star.active { color: var(--accent); }
+
+.fav-category    { margin-bottom: 16px; }
+.fav-cat-header  {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.fav-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.fav-item:last-child { border-bottom: none; }
+.fav-item-text {
+  flex: 1;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+.fav-remove { font-size: 1.25rem; padding-top: 1px; }
+
 /* ===== Fehlerpool Screen ===== */
 .fp-toolbar {
   display: flex;

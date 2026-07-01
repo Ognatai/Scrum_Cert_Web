@@ -1,5 +1,8 @@
 import { shuffle } from './shuffle.js';
-import { recordAnswer, addToFehlerPool, removeFromFehlerPool } from './progress.js';
+import { recordAnswer, addToFehlerPool, removeFromFehlerPool, addToFavorites, removeFromFavorites } from './progress.js';
+
+let favIds = new Set();
+export function setFavIds(ids) { favIds = ids; }
 
 // 45 seconds per question (total = count × 45)
 const SECS_PER_QUESTION = 45;
@@ -53,6 +56,14 @@ export function renderQuestion(user) {
     badge.className = 'multi-hint';
     badge.textContent = `${correctCount} auswählen`;
     qTextEl.appendChild(badge);
+  }
+
+  const starBtn = document.getElementById('btn-star');
+  if (starBtn && starBtn.style.display !== 'none') {
+    const isFav = favIds.has(q.id);
+    starBtn.textContent = isFav ? '★' : '☆';
+    starBtn.classList.toggle('active', isFav);
+    starBtn.title = isFav ? 'Aus Favoriten entfernen' : 'Als Favorit markieren';
   }
 
   // Options
@@ -287,6 +298,27 @@ function showResults() {
   // Reset review state
   document.getElementById('review-tabs').classList.remove('show');
   document.getElementById('btn-review').textContent = 'Antworten überprüfen';
+}
+
+export async function toggleCurrentFavorite(user) {
+  if (!state || !user) return null;
+  const q = state.questions[state.currentIndex];
+  const isFav = favIds.has(q.id);
+  if (isFav) {
+    favIds.delete(q.id);
+    await removeFromFavorites(user, q.id);
+  } else {
+    favIds.add(q.id);
+    await addToFavorites(user, q.id);
+  }
+  const starBtn = document.getElementById('btn-star');
+  if (starBtn) {
+    const nowFav = favIds.has(q.id);
+    starBtn.textContent = nowFav ? '★' : '☆';
+    starBtn.classList.toggle('active', nowFav);
+    starBtn.title = nowFav ? 'Aus Favoriten entfernen' : 'Als Favorit markieren';
+  }
+  return new Set(favIds);
 }
 
 export function toggleReview() {

@@ -162,3 +162,29 @@ export async function getFehlerPoolCount(user) {
   }
   return loadPool().length;
 }
+
+// ─── Favoriten ────────────────────────────────────────────────────────────────
+
+export async function addToFavorites(user, questionId) {
+  if (!isConfigured || !user) return;
+  await supabase.from('favorites').upsert(
+    { user_id: user.id, question_id: questionId },
+    { onConflict: 'user_id,question_id' }
+  );
+}
+
+export async function removeFromFavorites(user, questionId) {
+  if (!isConfigured || !user) return;
+  await supabase.from('favorites')
+    .delete()
+    .eq('user_id', user.id)
+    .eq('question_id', questionId);
+}
+
+export async function getFavoriteIds(user) {
+  if (!isConfigured || !user) return new Set();
+  const { data } = await supabase.from('favorites')
+    .select('question_id')
+    .eq('user_id', user.id);
+  return new Set((data ?? []).map(r => r.question_id));
+}
