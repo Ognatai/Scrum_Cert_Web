@@ -7,7 +7,7 @@ import {
   setFavIds, toggleCurrentFavorite
 } from './quiz.js';
 import { renderStats } from './stats.js';
-import { initBrowse, filterBrowse, toggleBrowseCat } from './browse.js';
+import { initBrowse, filterBrowse } from './browse.js';
 import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';

@@ -427,6 +427,9 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 /* ===== Browse screen ===== */
 .browse-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.browse-cat-section { margin-bottom: 12px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.browse-cat-header { border-radius: 0; }
+.browse-cat-body { padding: 8px 0; }
 .browse-header h2 { font-size: 1.1rem; font-weight: 700; flex: 1; }
 .search-input {
   width: 100%;
