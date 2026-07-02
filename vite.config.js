@@ -15,12 +15,16 @@ export default defineConfig({
       },
       manifest: {
         name: 'ScrumFit',
-        short_name: 'Quiz',
+        short_name: 'ScrumFit',
         description: 'ScrumFit – sprint to success',
         theme_color: '#2563eb',
         background_color: '#f0f4f8',
         display: 'standalone',
-        start_url: '/'
+        start_url: '/',
+        icons: [
+          { src: '/ScrumFit_AppIcon.png', sizes: '192x192', type: 'image/png' },
+          { src: '/ScrumFit_AppIcon.png', sizes: '512x512', type: 'image/png' }
+        ]
       }
     })
   ]
