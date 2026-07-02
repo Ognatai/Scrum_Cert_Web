@@ -1,5 +1,6 @@
 import { supabase, isConfigured } from './supabase.js';
 import { getLocalStats, getTotalLocalAnswers, getQuizHistory } from './progress.js';
+import { computeAchievements, renderAchievements } from './achievements.js';
 
 export async function getCategoryStats(user) {
   if (isConfigured && user) {
@@ -9,7 +10,7 @@ export async function getCategoryStats(user) {
   return getLocalStats();
 }
 
-export async function renderStats(user) {
+export async function renderStats(user, totalCategories = 0) {
   const loadingEl = document.getElementById('stats-loading');
   const contentEl = document.getElementById('stats-content');
   const emptyEl   = document.getElementById('stats-empty');
@@ -24,14 +25,14 @@ export async function renderStats(user) {
 
   loadingEl.classList.add('hidden');
 
+  const totalAnswers = isConfigured && user
+    ? (stats ?? []).reduce((s, r) => s + Number(r.gesamt), 0)
+    : getTotalLocalAnswers();
+
   if (!stats || stats.length === 0) {
     emptyEl.classList.remove('hidden');
   } else {
-    const total = isConfigured && user
-      ? stats.reduce((s, r) => s + Number(r.gesamt), 0)
-      : getTotalLocalAnswers();
-
-    totalEl.textContent = `${total} Antworten gespeichert`;
+    totalEl.textContent = `${totalAnswers} Antworten gespeichert`;
 
     tableEl.innerHTML = stats.map(row => {
       const pct = Number(row.prozent);
@@ -49,7 +50,10 @@ export async function renderStats(user) {
     contentEl.classList.remove('hidden');
   }
 
-  await renderHistory(user);
+  const history = await renderHistory(user);
+
+  const achievements = computeAchievements({ history, stats: stats ?? [], totalAnswers, totalCategories });
+  renderAchievements(document.getElementById('achievements-section'), achievements);
 }
 
 const MODE_LABEL = { normal: 'Normal', timed: 'Zeitlimit', fehlerPool: 'Fehlerpool', favorites: 'Favoriten' };
@@ -69,7 +73,7 @@ async function renderHistory(user) {
 
   if (!history.length) {
     emptyEl.classList.remove('hidden');
-    return;
+    return history;
   }
 
   listEl.innerHTML = `
@@ -95,4 +99,6 @@ async function renderHistory(user) {
         <span class="history-pct" style="color:${color}">${pct}%</span>
       </div>`;
   }).join('');
+
+  return history;
 }

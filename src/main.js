@@ -268,7 +268,7 @@ async function init() {
   document.getElementById('btn-theory-back').addEventListener('click', () => show('start-screen'));
   document.getElementById('btn-show-stats').addEventListener('click', async () => {
     show('stats-screen');
-    await renderStats(currentUser);
+    await renderStats(currentUser, new Set(ALL_QUESTIONS.map(q => q.category)).size);
   });
   document.getElementById('btn-logout-start').addEventListener('click', async () => {
     await signOut();

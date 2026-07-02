@@ -580,6 +580,76 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .stats-hint  { font-size: 0.87rem; color: var(--subtext); font-style: italic; }
 .stats-empty { text-align: center; color: var(--subtext); padding: 32px 0; font-size: 0.95rem; }
 
+/* ===== Achievements ===== */
+.achievements-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.achievements-count {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: #eff6ff;
+  border-radius: 99px;
+  padding: 2px 10px;
+}
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 16px;
+}
+.achievement-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+.achievement-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.achievement-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.achievement-card.locked .achievement-img-wrap img {
+  filter: grayscale(1) opacity(0.35);
+}
+.achievement-lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  background: rgba(0,0,0,0.08);
+}
+.achievement-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.achievement-desc {
+  font-size: 0.7rem;
+  color: var(--subtext);
+  line-height: 1.3;
+}
+.achievement-card.locked .achievement-name,
+.achievement-card.locked .achievement-desc { color: var(--slate); }
+
 /* ===== Quiz-Verlauf ===== */
 .history-heading { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
 .history-header {
