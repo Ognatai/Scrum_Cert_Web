@@ -35,7 +35,7 @@ export async function renderStats(user) {
 
     tableEl.innerHTML = stats.map(row => {
       const pct = Number(row.prozent);
-      const barColor = pct >= 70 ? 'var(--correct)' : pct >= 50 ? 'var(--primary)' : 'var(--wrong)';
+      const barColor = 'var(--primary)';
       return `<div class="stats-row">
         <span class="stats-cat">${row.category}</span>
         <div class="stats-bar-wrap">
@@ -81,7 +81,7 @@ async function renderHistory(user) {
     </div>` +
   history.map(entry => {
     const pct       = Number(entry.percentage);
-    const color     = pct >= 85 ? 'var(--correct)' : pct >= 60 ? 'var(--primary)' : 'var(--wrong)';
+    const color     = 'var(--primary)';
     const date      = new Date(entry.completed_at).toLocaleDateString('de-DE', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit'
