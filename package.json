@@ -6,15 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.42.4",
     "playwright": "^1.61.1",
     "vite": "^6.3.5",
-    "vite-plugin-pwa": "^0.21.0"
+    "vite-plugin-pwa": "^0.21.0",
+    "wrangler": "^4.106.0"
   },
   "allowScripts": {
     "esbuild@0.25.12": true
