@@ -25,7 +25,33 @@
         </div>
         <button id="btn-login" class="btn-primary btn-full">Anmelden</button>
         <p class="auth-switch">Noch kein Konto? <a href="#" id="show-register">Registrieren</a></p>
+        <p class="auth-switch"><a href="#" id="show-forgot">Passwort vergessen?</a></p>
         <p id="login-error" class="error-msg"></p>
+      </div>
+
+      <div id="forgot-form" class="hidden">
+        <h2>Passwort zurücksetzen</h2>
+        <p style="font-size:0.88rem;color:var(--subtext);margin-bottom:14px">Wir senden dir einen Link per E-Mail.</p>
+        <div class="form-group">
+          <input type="email" id="forgot-email" placeholder="E-Mail" autocomplete="email"/>
+        </div>
+        <button id="btn-forgot-send" class="btn-primary btn-full">Link senden</button>
+        <p class="auth-switch"><a href="#" id="show-login-from-forgot">&#8592; Zurück zur Anmeldung</a></p>
+        <p id="forgot-error" class="error-msg"></p>
+        <p id="forgot-success" class="success-msg"></p>
+      </div>
+
+      <div id="recovery-form" class="hidden">
+        <h2>Neues Passwort setzen</h2>
+        <div class="form-group">
+          <input type="password" id="recovery-password" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password"/>
+        </div>
+        <div class="form-group">
+          <input type="password" id="recovery-password-confirm" placeholder="Passwort wiederholen" autocomplete="new-password"/>
+        </div>
+        <button id="btn-recovery-save" class="btn-primary btn-full">Passwort speichern</button>
+        <p id="recovery-error" class="error-msg"></p>
+        <p id="recovery-success" class="success-msg"></p>
       </div>
 
       <div id="register-form" class="hidden">
@@ -365,6 +391,19 @@
             <span class="account-label">Mitglied seit</span>
             <span id="account-created" class="account-value">–</span>
           </div>
+        </div>
+
+        <div class="account-section">
+          <h3>Passwort ändern</h3>
+          <div class="form-group">
+            <input type="password" id="new-password" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password"/>
+          </div>
+          <div class="form-group">
+            <input type="password" id="new-password-confirm" placeholder="Passwort wiederholen" autocomplete="new-password"/>
+          </div>
+          <button id="btn-change-password" class="btn-primary">Passwort ändern</button>
+          <p id="change-password-error" class="error-msg"></p>
+          <p id="change-password-success" class="success-msg"></p>
         </div>
 
         <div class="account-danger-zone">

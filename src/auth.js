@@ -30,6 +30,18 @@ export async function getCurrentUser() {
   return data?.user ?? null;
 }
 
+export async function requestPasswordReset(email) {
+  if (!isConfigured) return { error: { message: 'Supabase nicht konfiguriert.' } };
+  return supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/'
+  });
+}
+
+export async function changePassword(newPassword) {
+  if (!isConfigured) return { error: { message: 'Supabase nicht konfiguriert.' } };
+  return supabase.auth.updateUser({ password: newPassword });
+}
+
 export async function deleteAccount() {
   if (!isConfigured) return { error: { message: 'Supabase nicht konfiguriert.' } };
   const { error } = await supabase.rpc('delete_my_account');

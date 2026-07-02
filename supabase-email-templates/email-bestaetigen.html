@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; margin: 0; padding: 32px 16px; }
+    .card { background: #fff; border-radius: 16px; max-width: 480px; margin: 0 auto; padding: 40px 36px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .logo { font-size: 1.4rem; font-weight: 800; color: #1e3a5f; margin-bottom: 4px; }
+    .tagline { font-size: 0.85rem; color: #64748b; margin-bottom: 28px; }
+    h1 { font-size: 1.2rem; color: #1e3a5f; margin-bottom: 12px; }
+    p { font-size: 0.95rem; color: #475569; line-height: 1.6; margin-bottom: 16px; }
+    .btn { display: inline-block; background: #2563eb; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-weight: 700; font-size: 1rem; margin: 8px 0 20px; }
+    .hint { font-size: 0.82rem; color: #94a3b8; }
+    .hint a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">ScrumFit</div>
+    <div class="tagline">sprint to success</div>
+    <h1>Willkommen bei ScrumFit!</h1>
+    <p>Hallo,</p>
+    <p>danke für deine Registrierung. Bitte bestätige deine E-Mail-Adresse, um dein Konto zu aktivieren:</p>
+    <a href="{{ .ConfirmationURL }}" class="btn">E-Mail jetzt bestätigen</a>
+    <p>Nach der Bestätigung kannst du dich sofort anmelden und mit dem Lernen loslegen.</p>
+    <p class="hint">Falls du kein Konto bei ScrumFit erstellt hast, kannst du diese E-Mail einfach ignorieren.</p>
+    <p class="hint">Probleme mit dem Button? Kopiere diesen Link in deinen Browser:<br><a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a></p>
+  </div>
+</body>
+</html>

@@ -1079,6 +1079,22 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .account-label { font-size: 0.85rem; color: var(--slate); font-weight: 500; }
 .account-value { font-size: 0.9rem; font-weight: 600; color: var(--navy); }
 
+.account-section {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.account-section h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.account-section .btn-primary { width: 100%; margin-top: 4px; }
+
 .account-danger-zone {
   border: 1.5px solid #fca5a5;
   border-radius: 10px;

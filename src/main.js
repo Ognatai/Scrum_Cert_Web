@@ -1,4 +1,4 @@
-import { onAuth, signIn, signUp, signOut, deleteAccount } from './auth.js';
+import { onAuth, signIn, signUp, signOut, deleteAccount, requestPasswordReset, changePassword } from './auth.js';
 import {
   initQuiz, renderQuestion, submitAnswer,
   backQuestion, nextQuestion,
@@ -225,10 +225,58 @@ async function init() {
   });
   document.getElementById('btn-guest').addEventListener('click', () => enterApp(null));
 
+  // Passwort vergessen
+  const loginForms = ['login-form', 'register-form', 'forgot-form', 'recovery-form'];
+  const showLoginForm = id => loginForms.forEach(f =>
+    document.getElementById(f).classList.toggle('hidden', f !== id)
+  );
+
+  document.getElementById('show-forgot').addEventListener('click', e => {
+    e.preventDefault();
+    showLoginForm('forgot-form');
+  });
+  document.getElementById('show-login-from-forgot').addEventListener('click', e => {
+    e.preventDefault();
+    showLoginForm('login-form');
+  });
+  document.getElementById('btn-forgot-send').addEventListener('click', async () => {
+    const email  = document.getElementById('forgot-email').value.trim();
+    const errEl  = document.getElementById('forgot-error');
+    const okEl   = document.getElementById('forgot-success');
+    errEl.textContent = '';
+    okEl.textContent  = '';
+    if (!email) { errEl.textContent = 'Bitte E-Mail-Adresse eingeben.'; return; }
+    const { error } = await requestPasswordReset(email);
+    if (error) errEl.textContent = translateAuthError(error.message);
+    else okEl.textContent = 'Link gesendet! Bitte prüfe dein Postfach.';
+  });
+  document.getElementById('btn-recovery-save').addEventListener('click', async () => {
+    const pw  = document.getElementById('recovery-password').value;
+    const pw2 = document.getElementById('recovery-password-confirm').value;
+    const errEl = document.getElementById('recovery-error');
+    const okEl  = document.getElementById('recovery-success');
+    errEl.textContent = '';
+    okEl.textContent  = '';
+    if (pw.length < 6) { errEl.textContent = 'Passwort muss mindestens 6 Zeichen lang sein.'; return; }
+    if (pw !== pw2)    { errEl.textContent = 'Passwörter stimmen nicht überein.'; return; }
+    const { error } = await changePassword(pw);
+    if (error) errEl.textContent = translateAuthError(error.message);
+    else {
+      okEl.textContent = 'Passwort erfolgreich geändert!';
+      setTimeout(() => showLoginForm('login-form'), 2000);
+    }
+  });
+
   onAuth((session, event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      show('login-screen');
+      showLoginForm('recovery-form');
+      return;
+    }
     if (event === 'SIGNED_OUT') {
       inApp = false;
       show('login-screen');
+      showLoginForm('login-form');
       return;
     }
     if (inApp) return; // Already in app — ignore all background auth events
@@ -420,8 +468,33 @@ async function init() {
     document.getElementById('account-created').textContent = created;
     accountOverlay.classList.remove('hidden');
   });
-  document.getElementById('btn-close-account').addEventListener('click',
-    () => accountOverlay.classList.add('hidden'));
+  document.getElementById('btn-close-account').addEventListener('click', () => {
+    accountOverlay.classList.add('hidden');
+    document.getElementById('new-password').value         = '';
+    document.getElementById('new-password-confirm').value = '';
+    document.getElementById('change-password-error').textContent   = '';
+    document.getElementById('change-password-success').textContent = '';
+  });
+  document.getElementById('btn-change-password').addEventListener('click', async () => {
+    const pw    = document.getElementById('new-password').value;
+    const pw2   = document.getElementById('new-password-confirm').value;
+    const errEl = document.getElementById('change-password-error');
+    const okEl  = document.getElementById('change-password-success');
+    errEl.textContent = '';
+    okEl.textContent  = '';
+    if (pw.length < 6) { errEl.textContent = 'Passwort muss mindestens 6 Zeichen lang sein.'; return; }
+    if (pw !== pw2)    { errEl.textContent = 'Passwörter stimmen nicht überein.'; return; }
+    const btn = document.getElementById('btn-change-password');
+    btn.disabled = true;
+    const { error } = await changePassword(pw);
+    btn.disabled = false;
+    if (error) errEl.textContent = translateAuthError(error.message);
+    else {
+      okEl.textContent = 'Passwort erfolgreich geändert!';
+      document.getElementById('new-password').value         = '';
+      document.getElementById('new-password-confirm').value = '';
+    }
+  });
   accountOverlay.addEventListener('click', e => {
     if (e.target === accountOverlay) accountOverlay.classList.add('hidden');
   });
