@@ -649,6 +649,63 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 }
 .achievement-card.locked .achievement-name,
 .achievement-card.locked .achievement-desc { color: var(--slate); }
+.achievement-img-click { cursor: zoom-in; }
+
+/* Lightbox */
+.achievement-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.achievement-lightbox.hidden { display: none; }
+.achievement-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+}
+.achievement-lightbox-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+.achievement-lightbox-content img {
+  max-width: min(420px, 85vw);
+  max-height: 70vh;
+  border-radius: 16px;
+  object-fit: contain;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+.achievement-lightbox-name {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.achievement-lightbox-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: var(--navy);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
 
 /* ===== Quiz-Verlauf ===== */
 .history-heading { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }

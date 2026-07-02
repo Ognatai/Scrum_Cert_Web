@@ -90,21 +90,50 @@ export function computeAchievements(ctx) {
 }
 
 export function renderAchievements(el, achievements) {
-  const earned = achievements.filter(a => a.earned).length;
+  const earned = achievements.filter(a => a.earned);
+  if (!earned.length) {
+    el.innerHTML = `<h3 class="achievements-heading">Erfolge</h3>
+      <p class="stats-empty" style="margin:0">Noch keine Erfolge freigeschaltet. Starte ein Quiz!</p>`;
+    return;
+  }
   el.innerHTML = `
     <h3 class="achievements-heading">
-      Achievements
-      <span class="achievements-count">${earned} / ${achievements.length}</span>
+      Erfolge
+      <span class="achievements-count">${earned.length} / ${achievements.length}</span>
     </h3>
     <div class="achievements-grid">
-      ${achievements.map(a => `
-        <div class="achievement-card ${a.earned ? 'earned' : 'locked'}" title="${a.description}">
+      ${earned.map(a => `
+        <div class="achievement-card earned" title="${a.description}">
           <div class="achievement-img-wrap">
-            <img src="${a.image}" alt="${a.name}" loading="lazy">
-            ${!a.earned ? '<div class="achievement-lock">&#128274;</div>' : ''}
+            <img src="${a.image}" alt="${a.name}" loading="lazy" class="achievement-img-click" data-src="${a.image}" data-name="${a.name}">
           </div>
           <div class="achievement-name">${a.name}</div>
           <div class="achievement-desc">${a.description}</div>
         </div>`).join('')}
+    </div>
+    <div id="achievement-lightbox" class="achievement-lightbox hidden" role="dialog">
+      <div class="achievement-lightbox-backdrop"></div>
+      <div class="achievement-lightbox-content">
+        <img id="achievement-lightbox-img" src="" alt="">
+        <div id="achievement-lightbox-name" class="achievement-lightbox-name"></div>
+        <button class="achievement-lightbox-close" id="achievement-lightbox-close">&#10005;</button>
+      </div>
     </div>`;
+
+  el.querySelectorAll('.achievement-img-click').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.dataset.src, img.dataset.name));
+  });
+  el.querySelector('#achievement-lightbox-close').addEventListener('click', closeLightbox);
+  el.querySelector('.achievement-lightbox-backdrop').addEventListener('click', closeLightbox);
+}
+
+function openLightbox(src, name) {
+  const lb = document.getElementById('achievement-lightbox');
+  document.getElementById('achievement-lightbox-img').src = src;
+  document.getElementById('achievement-lightbox-name').textContent = name;
+  lb.classList.remove('hidden');
+}
+
+function closeLightbox() {
+  document.getElementById('achievement-lightbox').classList.add('hidden');
 }
