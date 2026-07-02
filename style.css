@@ -810,6 +810,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   align-items: center;
 }
 .history-row:last-child { border-bottom: none; }
+#history-list { max-height: 400px; overflow-y: auto; }
 .history-date  { font-size: 0.82rem; color: var(--slate); }
 .history-mode  {
   font-size: 0.78rem;
