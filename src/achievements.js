@@ -51,28 +51,23 @@ const ACHIEVEMENTS = [
   {
     id: 'Wissenssammler',
     name: 'Wissenssammler',
-    description: 'In allen Kategorien mindestens eine Frage beantwortet',
+    description: '100 Fragen beantwortet',
     image: '/achievements/Wissenssammler.jpg',
-    check: ({ stats, totalCategories }) => totalCategories > 0 && stats.length >= totalCategories
+    check: ({ totalAnswers }) => totalAnswers >= 100
   },
   {
     id: 'Lernprofi',
     name: 'Lernprofi',
-    description: 'Durchschnitt über 80% in den letzten 10 Tests',
+    description: '25 Tests abgeschlossen',
     image: '/achievements/Lernprofi.jpg',
-    check: ({ history }) => {
-      const last10 = history.slice(0, 10);
-      if (last10.length < 10) return false;
-      const avg = last10.reduce((s, e) => s + Number(e.percentage), 0) / last10.length;
-      return avg >= 80;
-    }
+    check: ({ history }) => history.length >= 25
   },
   {
     id: 'Fortschrittsmacher',
     name: 'Fortschrittsmacher',
-    description: 'In 5 verschiedenen Kategorien mindestens 5 Fragen beantwortet',
+    description: '20 Tests abgeschlossen',
     image: '/achievements/Fortschritssmacher.jpg',
-    check: ({ stats }) => stats.filter(s => Number(s.gesamt) >= 5).length >= 5
+    check: ({ history }) => history.length >= 20
   }
 ];
 
