@@ -85,8 +85,65 @@ function getMaxStreak(history) {
   return max;
 }
 
+const LS_KEY = 'scrumfit_earned_achievements';
+
+function getStoredEarned() {
+  try { return new Set(JSON.parse(localStorage.getItem(LS_KEY)) ?? []); }
+  catch { return new Set(); }
+}
+
+function saveEarned(ids) {
+  localStorage.setItem(LS_KEY, JSON.stringify([...ids]));
+}
+
 export function computeAchievements(ctx) {
   return ACHIEVEMENTS.map(a => ({ ...a, earned: a.check(ctx) }));
+}
+
+export function checkAndNotifyNewAchievements(ctx) {
+  const all     = computeAchievements(ctx);
+  const stored  = getStoredEarned();
+  const newOnes = all.filter(a => a.earned && !stored.has(a.id));
+
+  if (newOnes.length) {
+    const updated = new Set([...stored, ...newOnes.map(a => a.id)]);
+    saveEarned(updated);
+    showAchievementPopups(newOnes);
+  }
+}
+
+let popupQueue = [];
+let popupActive = false;
+
+function showAchievementPopups(list) {
+  popupQueue.push(...list);
+  if (!popupActive) nextPopup();
+}
+
+function nextPopup() {
+  if (!popupQueue.length) { popupActive = false; return; }
+  popupActive = true;
+  const a = popupQueue.shift();
+
+  const el = document.createElement('div');
+  el.className = 'achievement-popup';
+  el.innerHTML = `
+    <div class="achievement-popup-inner">
+      <div class="achievement-popup-label">Neuer Erfolg freigeschaltet!</div>
+      <img src="${a.image}" alt="${a.name}" class="achievement-popup-img">
+      <div class="achievement-popup-name">${a.name}</div>
+      <div class="achievement-popup-desc">${a.description}</div>
+    </div>`;
+  document.body.appendChild(el);
+
+  requestAnimationFrame(() => el.classList.add('show'));
+
+  const dismiss = () => {
+    el.classList.remove('show');
+    el.addEventListener('transitionend', () => { el.remove(); nextPopup(); }, { once: true });
+  };
+  el.addEventListener('click', dismiss);
+  setTimeout(dismiss, 4000);
 }
 
 export function renderAchievements(el, achievements) {

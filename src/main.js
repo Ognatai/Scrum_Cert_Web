@@ -11,9 +11,10 @@ import { initBrowse, filterBrowse } from './browse.js';
 import { isConfigured } from './supabase.js';
 import { shuffle } from './shuffle.js';
 import { mountLegal } from './legal.js';
-import { getFehlerPool, getFehlerPoolCount, recordQuizResult, getFavoriteIds, removeFromFavorites } from './progress.js';
+import { getFehlerPool, getFehlerPoolCount, recordQuizResult, getFavoriteIds, removeFromFavorites, getQuizHistory, getLocalStats, getTotalLocalAnswers } from './progress.js';
 import { initFehlerPool, getSelectedQuestions, fpSelectAll, fpDeselectAll } from './fehlerPool.js';
 import { initFavorites, getFavSelectedQuestions, favSelectAll, favDeselectAll } from './favorites.js';
+import { checkAndNotifyNewAchievements } from './achievements.js';
 
 function translateAuthError(msg) {
   if (!msg) return 'Unbekannter Fehler.';
@@ -346,6 +347,16 @@ async function init() {
                 : quizOrigin === 'favorites'  ? 'favorites'
                 : mode;
     await recordQuizResult(currentUser, score, total, pct, label);
+
+    if (mode !== 'timed') {
+      const history      = await getQuizHistory(currentUser);
+      const stats        = getLocalStats();
+      const totalAnswers = isConfigured && currentUser
+        ? history.reduce((s, e) => s + Number(e.total), 0)
+        : getTotalLocalAnswers();
+      const totalCategories = new Set(ALL_QUESTIONS.map(q => q.category)).size;
+      checkAndNotifyNewAchievements({ history, stats, totalAnswers, totalCategories });
+    }
   });
   document.getElementById('btn-back-to-fehlerPool').addEventListener('click', async () => {
     const pool = await getFehlerPool(currentUser);

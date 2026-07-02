@@ -707,6 +707,60 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   font-weight: 700;
 }
 
+/* ===== Achievement Popup ===== */
+.achievement-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.achievement-popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+.achievement-popup-inner {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.28);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  min-width: 240px;
+  max-width: 88vw;
+  cursor: pointer;
+}
+.achievement-popup-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.achievement-popup-img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.achievement-popup-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+.achievement-popup-desc {
+  font-size: 0.85rem;
+  color: var(--subtext);
+}
+
 /* ===== Quiz-Verlauf ===== */
 .history-heading { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
 .history-header {
