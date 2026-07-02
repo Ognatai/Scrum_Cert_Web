@@ -148,16 +148,14 @@ function nextPopup() {
 
 export function renderAchievements(el, achievements) {
   const earned = achievements.filter(a => a.earned);
+  const metaEl = document.getElementById('achievements-meta');
+  if (metaEl) metaEl.textContent = earned.length ? `${earned.length} / ${achievements.length}` : '';
+
   if (!earned.length) {
-    el.innerHTML = `<h3 class="achievements-heading">Erfolge</h3>
-      <p class="stats-empty" style="margin:0">Noch keine Erfolge freigeschaltet. Starte ein Quiz!</p>`;
+    el.innerHTML = `<p class="stats-empty" style="margin:0">Noch keine Erfolge freigeschaltet. Starte ein Quiz!</p>`;
     return;
   }
   el.innerHTML = `
-    <h3 class="achievements-heading">
-      Erfolge
-      <span class="achievements-count">${earned.length} / ${achievements.length}</span>
-    </h3>
     <div class="achievements-grid">
       ${earned.map(a => `
         <div class="achievement-card earned" title="${a.description}">

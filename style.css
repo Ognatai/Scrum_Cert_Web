@@ -560,9 +560,36 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 /* ===== Stats Screen ===== */
 .stats-screen-inner { max-width: 760px; margin: 0 auto; }
-.stats-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.stats-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
 .stats-card-header h2 { font-size: 1.1rem; font-weight: 700; flex: 1; }
 .stats-total-label { font-size: 0.85rem; color: var(--subtext); margin-bottom: 16px; }
+
+/* Collapsible stats sections */
+.stats-section-card { padding: 0; overflow: hidden; }
+.stats-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.stats-section-header:hover { background: var(--light-blue); }
+.stats-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  flex: 1;
+}
+.stats-section-meta {
+  font-size: 0.82rem;
+  color: var(--subtext);
+  font-weight: 500;
+}
+.stats-section-body { padding: 0 24px 20px; }
 .stats-row {
   display: flex;
   align-items: center;

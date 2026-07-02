@@ -250,30 +250,60 @@
   <!-- ===== Stats Screen ===== -->
   <div id="stats-screen" class="hidden">
     <div class="container stats-screen-inner">
+
+      <!-- Header -->
       <div class="card">
         <div class="stats-card-header">
           <button class="btn-secondary" id="btn-stats-back" style="padding:7px 16px;font-size:0.9rem">&#8592; Zurück</button>
           <h2>Meine Statistiken</h2>
         </div>
-        <div id="stats-loading" class="stats-empty">Lädt…</div>
-        <div id="stats-content" class="hidden">
-          <p class="stats-total-label" id="stats-total"></p>
-          <div id="stats-table"></div>
+        <div id="stats-loading" class="stats-empty hidden">Lädt…</div>
+      </div>
+
+      <!-- Erfolge -->
+      <div class="card stats-section-card">
+        <button class="stats-section-header" data-target="achievements-body">
+          <span class="stats-section-title">Erfolge</span>
+          <span class="stats-section-meta" id="achievements-meta"></span>
+          <span class="fp-cat-chevron">&#9660;</span>
+        </button>
+        <div class="stats-section-body hidden" id="achievements-body">
+          <div id="achievements-section"></div>
         </div>
-        <div id="stats-empty" class="stats-empty hidden">
-          Noch keine Antworten gespeichert. Starte ein Quiz, um deine Statistik aufzubauen.
+      </div>
+
+      <!-- Verlauf -->
+      <div class="card stats-section-card">
+        <button class="stats-section-header" data-target="history-body">
+          <span class="stats-section-title">Verlauf</span>
+          <span class="stats-section-meta" id="history-meta"></span>
+          <span class="fp-cat-chevron">&#9660;</span>
+        </button>
+        <div class="stats-section-body hidden" id="history-body">
+          <div id="history-loading" class="stats-empty">Lädt…</div>
+          <div id="history-list"></div>
+          <div id="history-empty" class="stats-empty hidden">Noch keine abgeschlossenen Quizversuche.</div>
         </div>
       </div>
-      <div class="card">
-        <p class="stats-hint">Tipp: Fokussiere dich auf Kategorien mit niedrigen Prozentzahlen.</p>
+
+      <!-- Kategorien -->
+      <div class="card stats-section-card">
+        <button class="stats-section-header" data-target="categories-body">
+          <span class="stats-section-title">Kategorien</span>
+          <span class="stats-section-meta" id="stats-total"></span>
+          <span class="fp-cat-chevron">&#9660;</span>
+        </button>
+        <div class="stats-section-body hidden" id="categories-body">
+          <div id="stats-content" class="hidden">
+            <div id="stats-table"></div>
+          </div>
+          <div id="stats-empty" class="stats-empty hidden">
+            Noch keine Antworten gespeichert. Starte ein Quiz, um deine Statistik aufzubauen.
+          </div>
+          <p class="stats-hint">Tipp: Fokussiere dich auf Kategorien mit niedrigen Prozentzahlen.</p>
+        </div>
       </div>
-      <div class="card" id="achievements-section"></div>
-      <div class="card">
-        <h3 class="history-heading">Verlauf</h3>
-        <div id="history-loading" class="stats-empty">Lädt…</div>
-        <div id="history-list"></div>
-        <div id="history-empty" class="stats-empty hidden">Noch keine abgeschlossenen Quizversuche.</div>
-      </div>
+
     </div>
   </div>
 

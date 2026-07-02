@@ -21,7 +21,10 @@ export async function renderStats(user, totalCategories = 0) {
   contentEl.classList.add('hidden');
   emptyEl.classList.add('hidden');
 
-  const stats = await getCategoryStats(user);
+  const [stats, history] = await Promise.all([
+    getCategoryStats(user),
+    getQuizHistory(user)
+  ]);
 
   loadingEl.classList.add('hidden');
 
@@ -29,52 +32,52 @@ export async function renderStats(user, totalCategories = 0) {
     ? (stats ?? []).reduce((s, r) => s + Number(r.gesamt), 0)
     : getTotalLocalAnswers();
 
+  // Kategorien
   if (!stats || stats.length === 0) {
     emptyEl.classList.remove('hidden');
   } else {
-    totalEl.textContent = `${totalAnswers} Antworten gespeichert`;
-
+    totalEl.textContent = `${totalAnswers} Antworten`;
     tableEl.innerHTML = stats.map(row => {
       const pct = Number(row.prozent);
-      const barColor = 'var(--primary)';
       return `<div class="stats-row">
         <span class="stats-cat">${row.category}</span>
         <div class="stats-bar-wrap">
-          <div class="stats-bar" style="width:${pct}%;background:${barColor}"></div>
+          <div class="stats-bar" style="width:${pct}%;background:var(--primary)"></div>
         </div>
-        <span class="stats-pct" style="color:${barColor}">${pct}%</span>
+        <span class="stats-pct" style="color:var(--primary)">${pct}%</span>
         <span class="stats-count">${row.richtig}/${row.gesamt}</span>
       </div>`;
     }).join('');
-
     contentEl.classList.remove('hidden');
   }
 
-  const history = await renderHistory(user);
+  // Verlauf
+  renderHistory(history);
 
+  // Erfolge
   const achievements = computeAchievements({ history, stats: stats ?? [], totalAnswers, totalCategories });
   renderAchievements(document.getElementById('achievements-section'), achievements);
 }
 
 const MODE_LABEL = { normal: 'Normal', timed: 'Zeitlimit', fehlerPool: 'Fehlerpool', favorites: 'Favoriten' };
 
-async function renderHistory(user) {
+function renderHistory(history) {
   const loadingEl = document.getElementById('history-loading');
   const listEl    = document.getElementById('history-list');
   const emptyEl   = document.getElementById('history-empty');
+  const metaEl    = document.getElementById('history-meta');
 
-  loadingEl.classList.remove('hidden');
+  loadingEl.classList.add('hidden');
   listEl.innerHTML = '';
   emptyEl.classList.add('hidden');
 
-  const history = await getQuizHistory(user);
-
-  loadingEl.classList.add('hidden');
-
   if (!history.length) {
     emptyEl.classList.remove('hidden');
-    return history;
+    metaEl.textContent = '';
+    return;
   }
+
+  metaEl.textContent = `${history.length} Einträge`;
 
   listEl.innerHTML = `
     <div class="history-header">
@@ -85,7 +88,6 @@ async function renderHistory(user) {
     </div>` +
   history.map(entry => {
     const pct       = Number(entry.percentage);
-    const color     = 'var(--primary)';
     const date      = new Date(entry.completed_at).toLocaleDateString('de-DE', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit'
@@ -96,9 +98,7 @@ async function renderHistory(user) {
         <span class="history-date">${date}</span>
         <span class="history-mode">${modeLabel}</span>
         <span class="history-score">${entry.score} / ${entry.total}</span>
-        <span class="history-pct" style="color:${color}">${pct}%</span>
+        <span class="history-pct" style="color:var(--primary)">${pct}%</span>
       </div>`;
   }).join('');
-
-  return history;
 }

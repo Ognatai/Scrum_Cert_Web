@@ -434,6 +434,15 @@ async function init() {
   document.getElementById('btn-stats-back').addEventListener('click',
     () => show('start-screen'));
 
+  document.querySelectorAll('.stats-section-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const body = document.getElementById(header.dataset.target);
+      const chev = header.querySelector('.fp-cat-chevron');
+      body.classList.toggle('hidden');
+      chev.classList.toggle('open');
+    });
+  });
+
   // Impressum modal
   const impressumOverlay = document.getElementById('impressum-overlay');
   document.getElementById('btn-impressum').addEventListener('click', () => {
