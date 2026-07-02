@@ -718,7 +718,7 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   min-width: 22px;
   height: 22px;
   border-radius: 99px;
-  background: var(--accent);
+  background: #fff;
   color: var(--navy);
   font-size: 0.78rem;
   font-weight: 700;
