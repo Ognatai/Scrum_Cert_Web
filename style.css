@@ -39,6 +39,26 @@ body {
 
 .hidden { display: none !important; }
 
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Global focus indicator */
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+button:focus-visible, a:focus-visible {
+  border-radius: 4px;
+}
+
 /* All screens fill remaining space so footer sticks to bottom */
 #login-screen, #start-screen, #quiz-screen, #browse-screen,
 #results-screen, #stats-screen, #fehlerPool-screen, #favorites-screen { flex: 1; }
@@ -128,6 +148,13 @@ header p {
   user-select: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  /* button element reset */
+  width: 100%;
+  background: var(--card-bg, #fff);
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  color: inherit;
 }
 .option:hover:not(.disabled) {
   border-color: var(--primary);
@@ -677,7 +704,23 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 }
 .achievement-card.locked .achievement-name,
 .achievement-card.locked .achievement-desc { color: var(--slate); }
-.achievement-img-click { cursor: zoom-in; }
+.achievement-img-click {
+  cursor: zoom-in;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 0;
+}
+.achievement-img-click img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
 
 /* Lightbox */
 .achievement-lightbox {

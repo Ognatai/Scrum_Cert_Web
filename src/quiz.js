@@ -74,13 +74,14 @@ export function renderQuestion(user) {
 
   opts.forEach((opt, i) => {
     const letter = String.fromCharCode(65 + i);
-    const div = document.createElement('div');
-    div.className = 'option';
-    div.dataset.idx = i;
-    div.innerHTML = `<div class="letter-badge">${letter}</div><div class="option-text">${opt.text}</div>`;
-    div.addEventListener('click', () => toggleOption(div, i));
-    div.addEventListener('touchend', e => { e.preventDefault(); toggleOption(div, i); });
-    container.appendChild(div);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option';
+    btn.dataset.idx = i;
+    btn.setAttribute('aria-pressed', 'false');
+    btn.innerHTML = `<div class="letter-badge">${letter}</div><div class="option-text">${opt.text}</div>`;
+    btn.addEventListener('click', () => toggleOption(btn, i));
+    container.appendChild(btn);
   });
 
   // Clear feedback
@@ -120,6 +121,8 @@ function restoreAnsweredState(q, opts, entry) {
   document.querySelectorAll('.option').forEach(div => {
     const i = Number(div.dataset.idx);
     div.classList.add('disabled');
+    div.disabled = true;
+    div.setAttribute('aria-pressed', entry.selected.has(i) ? 'true' : 'false');
     applyOptionStyle(div, opts[i], entry.selected.has(i));
   });
 
@@ -141,14 +144,20 @@ function toggleOption(div, index) {
     if (state.selectedIndices.has(index)) {
       state.selectedIndices.delete(index);
       div.classList.remove('selected');
+      div.setAttribute('aria-pressed', 'false');
     } else {
       state.selectedIndices.add(index);
       div.classList.add('selected');
+      div.setAttribute('aria-pressed', 'true');
     }
   } else {
-    document.querySelectorAll('.option').forEach(d => d.classList.remove('selected'));
+    document.querySelectorAll('.option').forEach(d => {
+      d.classList.remove('selected');
+      d.setAttribute('aria-pressed', 'false');
+    });
     state.selectedIndices = new Set([index]);
     div.classList.add('selected');
+    div.setAttribute('aria-pressed', 'true');
   }
 
   if (mode === 'timed') {
@@ -179,6 +188,7 @@ export async function submitAnswer(user) {
   document.querySelectorAll('.option').forEach(div => {
     const i = Number(div.dataset.idx);
     div.classList.add('disabled');
+    div.disabled = true;
     applyOptionStyle(div, opts[i], selectedIndices.has(i));
   });
 
@@ -234,8 +244,11 @@ function updateTimerDisplay() {
   const el = document.getElementById('timer');
   const min = Math.floor(state.timeLeft / 60);
   const sec = state.timeLeft % 60;
-  el.textContent = String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
-  el.className = 'timer-bar' + (state.timeLeft < 120 ? ' warning' : '');
+  const timeStr = String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  el.textContent = timeStr;
+  const isWarning = state.timeLeft < 120;
+  el.className = 'timer-bar' + (isWarning ? ' warning' : '');
+  el.setAttribute('aria-label', `Verbleibende Zeit: ${timeStr}${isWarning ? ' – Bitte beeil dich!' : ''}`);
 }
 
 async function finishTimedQuiz(user) {

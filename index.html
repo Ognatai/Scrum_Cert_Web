@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
+  <h1 class="sr-only">ScrumFit – Scrum Quiz</h1>
 
   <!-- ===== Login Screen ===== -->
   <div id="login-screen">
@@ -18,54 +19,61 @@
       <div id="login-form">
         <h2>Anmelden</h2>
         <div class="form-group">
-          <input type="email" id="login-email" placeholder="E-Mail" autocomplete="email"/>
+          <label for="login-email" class="sr-only">E-Mail-Adresse</label>
+          <input type="email" id="login-email" placeholder="E-Mail" autocomplete="email" aria-describedby="login-error"/>
         </div>
         <div class="form-group">
-          <input type="password" id="login-password" placeholder="Passwort" autocomplete="current-password"/>
+          <label for="login-password" class="sr-only">Passwort</label>
+          <input type="password" id="login-password" placeholder="Passwort" autocomplete="current-password" aria-describedby="login-error"/>
         </div>
         <button id="btn-login" class="btn-primary btn-full">Anmelden</button>
         <p class="auth-switch">Noch kein Konto? <a href="#" id="show-register">Registrieren</a></p>
         <p class="auth-switch"><a href="#" id="show-forgot">Passwort vergessen?</a></p>
-        <p id="login-error" class="error-msg"></p>
+        <p id="login-error" class="error-msg" aria-live="polite"></p>
       </div>
 
       <div id="forgot-form" class="hidden">
         <h2>Passwort zurücksetzen</h2>
         <p style="font-size:0.88rem;color:var(--subtext);margin-bottom:14px">Wir senden dir einen Link per E-Mail.</p>
         <div class="form-group">
-          <input type="email" id="forgot-email" placeholder="E-Mail" autocomplete="email"/>
+          <label for="forgot-email" class="sr-only">E-Mail-Adresse</label>
+          <input type="email" id="forgot-email" placeholder="E-Mail" autocomplete="email" aria-describedby="forgot-error forgot-success"/>
         </div>
         <button id="btn-forgot-send" class="btn-primary btn-full">Link senden</button>
         <p class="auth-switch"><a href="#" id="show-login-from-forgot">&#8592; Zurück zur Anmeldung</a></p>
-        <p id="forgot-error" class="error-msg"></p>
-        <p id="forgot-success" class="success-msg"></p>
+        <p id="forgot-error" class="error-msg" aria-live="polite"></p>
+        <p id="forgot-success" class="success-msg" aria-live="polite"></p>
       </div>
 
       <div id="recovery-form" class="hidden">
         <h2>Neues Passwort setzen</h2>
         <div class="form-group">
-          <input type="password" id="recovery-password" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password"/>
+          <label for="recovery-password" class="sr-only">Neues Passwort</label>
+          <input type="password" id="recovery-password" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password" aria-describedby="recovery-error"/>
         </div>
         <div class="form-group">
-          <input type="password" id="recovery-password-confirm" placeholder="Passwort wiederholen" autocomplete="new-password"/>
+          <label for="recovery-password-confirm" class="sr-only">Passwort wiederholen</label>
+          <input type="password" id="recovery-password-confirm" placeholder="Passwort wiederholen" autocomplete="new-password" aria-describedby="recovery-error"/>
         </div>
         <button id="btn-recovery-save" class="btn-primary btn-full">Passwort speichern</button>
-        <p id="recovery-error" class="error-msg"></p>
-        <p id="recovery-success" class="success-msg"></p>
+        <p id="recovery-error" class="error-msg" aria-live="polite"></p>
+        <p id="recovery-success" class="success-msg" aria-live="polite"></p>
       </div>
 
       <div id="register-form" class="hidden">
         <h2>Registrieren</h2>
         <div class="form-group">
-          <input type="email" id="register-email" placeholder="E-Mail" autocomplete="email"/>
+          <label for="register-email" class="sr-only">E-Mail-Adresse</label>
+          <input type="email" id="register-email" placeholder="E-Mail" autocomplete="email" aria-describedby="register-error"/>
         </div>
         <div class="form-group">
-          <input type="password" id="register-password" placeholder="Passwort (mind. 6 Zeichen)" autocomplete="new-password"/>
+          <label for="register-password" class="sr-only">Passwort (mindestens 6 Zeichen)</label>
+          <input type="password" id="register-password" placeholder="Passwort (mind. 6 Zeichen)" autocomplete="new-password" aria-describedby="register-error"/>
         </div>
         <button id="btn-register" class="btn-primary btn-full">Konto erstellen</button>
         <p class="auth-switch">Bereits registriert? <a href="#" id="show-login">Anmelden</a></p>
-        <p id="register-error" class="error-msg"></p>
-        <p id="register-success" class="success-msg"></p>
+        <p id="register-error" class="error-msg" aria-live="polite"></p>
+        <p id="register-success" class="success-msg" aria-live="polite"></p>
       </div>
 
       <div class="guest-divider"><span>oder</span></div>
@@ -81,7 +89,7 @@
       </header>
 
       <div id="guest-banner" class="guest-banner hidden">
-        Gast-Modus: Statistik wird lokal gespeichert.
+        Gast-Modus
         <button id="btn-show-login" style="margin-left:8px;padding:3px 10px;font-size:0.8rem;border-radius:6px;border:1px solid #2563eb;background:transparent;color:#2563eb;cursor:pointer;font-weight:600">Anmelden</button>
       </div>
 
@@ -123,19 +131,19 @@
         <div class="filter-panel" id="filter-panel-range">
           <div class="range-inputs" id="range-inputs">
             <div class="range-field">
-              <label>Von F#</label>
-              <input type="number" id="range-from" min="1" max="268" value="1"/>
+              <label for="range-from">Von F#</label>
+              <input type="number" id="range-from" min="1" max="268" value="1" aria-describedby="range-error"/>
               <span class="field-hint">Start</span>
             </div>
             <div class="range-field">
-              <label>Bis F#</label>
-              <input type="number" id="range-to" min="1" max="268" value="268"/>
+              <label for="range-to">Bis F#</label>
+              <input type="number" id="range-to" min="1" max="268" value="268" aria-describedby="range-error"/>
               <span class="field-hint">Ende</span>
             </div>
           </div>
         </div>
 
-        <div class="range-error" id="range-error"></div>
+        <div class="range-error" id="range-error" aria-live="polite"></div>
 
         <!-- Aktionen -->
         <div class="start-actions">
@@ -166,7 +174,7 @@
   <!-- ===== Quiz Screen ===== -->
   <div id="quiz-screen" class="hidden">
     <div class="container">
-      <div class="timer-bar hidden" id="timer"></div>
+      <div class="timer-bar hidden" id="timer" role="timer" aria-label="Verbleibende Zeit" aria-live="off"></div>
       <div class="progress-bar-wrap">
         <div class="progress-bar" id="progress-bar" style="width:0%"></div>
       </div>
@@ -180,7 +188,7 @@
           <button class="btn-star" id="btn-star" title="Als Favorit markieren" style="display:none">☆</button>
         </div>
         <div class="options" id="options"></div>
-        <div class="feedback" id="feedback"></div>
+        <div class="feedback" id="feedback" role="status" aria-live="polite" aria-atomic="true"></div>
         <div class="btn-row">
           <button class="btn-secondary" id="btn-back" disabled>← Zurück</button>
           <button class="btn-secondary" id="btn-submit" disabled>Antwort prüfen</button>
@@ -199,6 +207,7 @@
           <h2>Fragen &amp; Antworten durchsuchen</h2>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:10px">
+          <label for="browse-search" class="sr-only">Fragen oder Antworten suchen</label>
           <input class="search-input" id="browse-search" type="text" placeholder="Fragen oder Antworten suchen..." style="margin-bottom:0;flex:1"/>
           <button class="btn-primary" id="btn-browse-search" style="white-space:nowrap;padding:10px 20px">Suchen</button>
         </div>
@@ -405,10 +414,10 @@
   </footer>
 
   <!-- ===== Account Modal ===== -->
-  <div id="account-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+  <div id="account-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="account-modal-title">
     <div class="modal-card">
       <div class="modal-header">
-        <h2>Account verwalten</h2>
+        <h2 id="account-modal-title">Account verwalten</h2>
         <button class="modal-close" id="btn-close-account" aria-label="Schließen">&#10005;</button>
       </div>
       <div class="modal-body">
@@ -426,14 +435,16 @@
         <div class="account-section">
           <h3>Passwort ändern</h3>
           <div class="form-group">
-            <input type="password" id="new-password" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password"/>
+            <label for="new-password" class="sr-only">Neues Passwort (mindestens 6 Zeichen)</label>
+            <input type="password" id="new-password" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password" aria-describedby="change-password-error"/>
           </div>
           <div class="form-group">
-            <input type="password" id="new-password-confirm" placeholder="Passwort wiederholen" autocomplete="new-password"/>
+            <label for="new-password-confirm" class="sr-only">Neues Passwort wiederholen</label>
+            <input type="password" id="new-password-confirm" placeholder="Passwort wiederholen" autocomplete="new-password" aria-describedby="change-password-error"/>
           </div>
           <button id="btn-change-password" class="btn-primary">Passwort ändern</button>
-          <p id="change-password-error" class="error-msg"></p>
-          <p id="change-password-success" class="success-msg"></p>
+          <p id="change-password-error" class="error-msg" aria-live="polite"></p>
+          <p id="change-password-success" class="success-msg" aria-live="polite"></p>
         </div>
 
         <div class="account-danger-zone">
@@ -446,10 +457,10 @@
   </div>
 
   <!-- ===== Impressum Modal ===== -->
-  <div id="impressum-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+  <div id="impressum-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="impressum-modal-title">
     <div class="modal-card">
       <div class="modal-header">
-        <h2>Impressum</h2>
+        <h2 id="impressum-modal-title">Impressum</h2>
         <button class="modal-close" id="btn-close-impressum" aria-label="Schließen">&#10005;</button>
       </div>
       <div class="modal-body" id="impressum-content"></div>
@@ -457,10 +468,10 @@
   </div>
 
   <!-- ===== Datenschutz Modal ===== -->
-  <div id="datenschutz-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+  <div id="datenschutz-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="datenschutz-modal-title">
     <div class="modal-card">
       <div class="modal-header">
-        <h2>Datenschutzerklärung</h2>
+        <h2 id="datenschutz-modal-title">Datenschutzerklärung</h2>
         <button class="modal-close" id="btn-close-datenschutz" aria-label="Schließen">&#10005;</button>
       </div>
       <div class="modal-body" id="datenschutz-content"></div>

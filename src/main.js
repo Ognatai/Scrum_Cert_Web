@@ -31,6 +31,27 @@ function translateAuthError(msg) {
 
 let ALL_QUESTIONS = [];
 let currentUser = null;
+
+function openModal(overlay) {
+  overlay.classList.remove('hidden');
+  const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable.length) focusable[0].focus();
+  overlay._trapHandler = e => {
+    if (e.key !== 'Tab') return;
+    const els = [...overlay.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.closest('.hidden'));
+    if (!els.length) return;
+    const first = els[0], last = els[els.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
+  overlay.addEventListener('keydown', overlay._trapHandler);
+}
+
+function closeModal(overlay, returnFocusEl) {
+  overlay.classList.add('hidden');
+  if (overlay._trapHandler) overlay.removeEventListener('keydown', overlay._trapHandler);
+  if (returnFocusEl) returnFocusEl.focus();
+}
 let selectedCats = new Set();
 let inApp = false;
 let quizOrigin = 'start'; // 'start' | 'fehlerPool' | 'favorites'
@@ -181,10 +202,13 @@ async function enterApp(session) {
   }
 
   const guestBanner = document.getElementById('guest-banner');
+  const statsBtn = document.getElementById('btn-show-stats');
   if (!currentUser) {
     guestBanner.classList.remove('hidden');
+    if (statsBtn) statsBtn.classList.add('hidden');
   } else {
     guestBanner.classList.add('hidden');
+    if (statsBtn) statsBtn.classList.remove('hidden');
   }
   show('start-screen');
 }
@@ -435,55 +459,62 @@ async function init() {
     () => show('start-screen'));
 
   document.querySelectorAll('.stats-section-header').forEach(header => {
+    header.setAttribute('aria-expanded', 'false');
+    header.setAttribute('aria-controls', header.dataset.target);
     header.addEventListener('click', () => {
       const body = document.getElementById(header.dataset.target);
       const chev = header.querySelector('.fp-cat-chevron');
-      body.classList.toggle('hidden');
-      chev.classList.toggle('open');
+      const expanded = body.classList.toggle('hidden') === false;
+      chev.classList.toggle('open', expanded);
+      header.setAttribute('aria-expanded', String(expanded));
     });
   });
 
   // Impressum modal
   const impressumOverlay = document.getElementById('impressum-overlay');
-  document.getElementById('btn-impressum').addEventListener('click', () => {
+  const btnImpressum = document.getElementById('btn-impressum');
+  btnImpressum.addEventListener('click', () => {
     mountLegal(document.getElementById('impressum-content'), 'impressum');
-    impressumOverlay.classList.remove('hidden');
+    openModal(impressumOverlay);
   });
   document.getElementById('btn-close-impressum').addEventListener('click',
-    () => impressumOverlay.classList.add('hidden'));
+    () => closeModal(impressumOverlay, btnImpressum));
   impressumOverlay.addEventListener('click', e => {
-    if (e.target === impressumOverlay) impressumOverlay.classList.add('hidden');
+    if (e.target === impressumOverlay) closeModal(impressumOverlay, btnImpressum);
   });
 
   // Datenschutz modal
   const datenschutzOverlay = document.getElementById('datenschutz-overlay');
-  document.getElementById('btn-datenschutz').addEventListener('click', () => {
+  const btnDatenschutz = document.getElementById('btn-datenschutz');
+  btnDatenschutz.addEventListener('click', () => {
     mountLegal(document.getElementById('datenschutz-content'), 'datenschutz');
-    datenschutzOverlay.classList.remove('hidden');
+    openModal(datenschutzOverlay);
   });
   document.getElementById('btn-close-datenschutz').addEventListener('click',
-    () => datenschutzOverlay.classList.add('hidden'));
+    () => closeModal(datenschutzOverlay, btnDatenschutz));
   datenschutzOverlay.addEventListener('click', e => {
-    if (e.target === datenschutzOverlay) datenschutzOverlay.classList.add('hidden');
+    if (e.target === datenschutzOverlay) closeModal(datenschutzOverlay, btnDatenschutz);
   });
 
   // Account modal
   const accountOverlay = document.getElementById('account-overlay');
-  document.getElementById('btn-account').addEventListener('click', () => {
+  const btnAccount = document.getElementById('btn-account');
+  btnAccount.addEventListener('click', () => {
     document.getElementById('account-email').textContent   = currentUser?.email ?? '–';
     const created = currentUser?.created_at
       ? new Date(currentUser.created_at).toLocaleDateString('de-DE')
       : '–';
     document.getElementById('account-created').textContent = created;
-    accountOverlay.classList.remove('hidden');
+    openModal(accountOverlay);
   });
-  document.getElementById('btn-close-account').addEventListener('click', () => {
-    accountOverlay.classList.add('hidden');
+  const closeAccount = () => {
+    closeModal(accountOverlay, btnAccount);
     document.getElementById('new-password').value         = '';
     document.getElementById('new-password-confirm').value = '';
     document.getElementById('change-password-error').textContent   = '';
     document.getElementById('change-password-success').textContent = '';
-  });
+  };
+  document.getElementById('btn-close-account').addEventListener('click', closeAccount);
   document.getElementById('btn-change-password').addEventListener('click', async () => {
     const pw    = document.getElementById('new-password').value;
     const pw2   = document.getElementById('new-password-confirm').value;
@@ -505,7 +536,7 @@ async function init() {
     }
   });
   accountOverlay.addEventListener('click', e => {
-    if (e.target === accountOverlay) accountOverlay.classList.add('hidden');
+    if (e.target === accountOverlay) closeAccount();
   });
   document.getElementById('btn-delete-account').addEventListener('click', async () => {
     const confirmed = confirm(
@@ -522,7 +553,7 @@ async function init() {
       btn.textContent = 'Account dauerhaft löschen';
       return;
     }
-    accountOverlay.classList.add('hidden');
+    closeModal(accountOverlay, btnAccount);
     inApp = false;
     currentUser = null;
     show('login-screen');
@@ -530,9 +561,9 @@ async function init() {
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-      impressumOverlay.classList.add('hidden');
-      datenschutzOverlay.classList.add('hidden');
-      accountOverlay.classList.add('hidden');
+      if (!impressumOverlay.classList.contains('hidden')) closeModal(impressumOverlay, btnImpressum);
+      else if (!datenschutzOverlay.classList.contains('hidden')) closeModal(datenschutzOverlay, btnDatenschutz);
+      else if (!accountOverlay.classList.contains('hidden')) closeAccount();
     }
   });
 

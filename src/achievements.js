@@ -160,35 +160,60 @@ export function renderAchievements(el, achievements) {
       ${earned.map(a => `
         <div class="achievement-card earned" title="${a.description}">
           <div class="achievement-img-wrap">
-            <img src="${a.image}" alt="${a.name}" loading="lazy" class="achievement-img-click" data-src="${a.image}" data-name="${a.name}">
+            <button class="achievement-img-click" type="button" aria-label="${a.name} vergrößern" data-src="${a.image}" data-name="${a.name}">
+              <img src="${a.image}" alt="${a.name}" loading="lazy">
+            </button>
           </div>
           <div class="achievement-name">${a.name}</div>
           <div class="achievement-desc">${a.description}</div>
         </div>`).join('')}
     </div>
-    <div id="achievement-lightbox" class="achievement-lightbox hidden" role="dialog">
+    <div id="achievement-lightbox" class="achievement-lightbox hidden" role="dialog" aria-modal="true" aria-labelledby="achievement-lightbox-name">
       <div class="achievement-lightbox-backdrop"></div>
       <div class="achievement-lightbox-content">
         <img id="achievement-lightbox-img" src="" alt="">
         <div id="achievement-lightbox-name" class="achievement-lightbox-name"></div>
-        <button class="achievement-lightbox-close" id="achievement-lightbox-close">&#10005;</button>
+        <button class="achievement-lightbox-close" id="achievement-lightbox-close" aria-label="Schließen">&#10005;</button>
       </div>
     </div>`;
 
-  el.querySelectorAll('.achievement-img-click').forEach(img => {
-    img.addEventListener('click', () => openLightbox(img.dataset.src, img.dataset.name));
+  el.querySelectorAll('.achievement-img-click').forEach(btn => {
+    btn.addEventListener('click', () => openLightbox(btn.dataset.src, btn.dataset.name, btn));
   });
   el.querySelector('#achievement-lightbox-close').addEventListener('click', closeLightbox);
   el.querySelector('.achievement-lightbox-backdrop').addEventListener('click', closeLightbox);
 }
 
-function openLightbox(src, name) {
+let lightboxTrigger = null;
+let lightboxTrapHandler = null;
+
+function openLightbox(src, name, triggerEl) {
+  lightboxTrigger = triggerEl ?? null;
   const lb = document.getElementById('achievement-lightbox');
   document.getElementById('achievement-lightbox-img').src = src;
+  document.getElementById('achievement-lightbox-img').alt = name;
   document.getElementById('achievement-lightbox-name').textContent = name;
   lb.classList.remove('hidden');
+
+  const closeBtn = document.getElementById('achievement-lightbox-close');
+  closeBtn.focus();
+
+  lightboxTrapHandler = e => {
+    if (e.key === 'Escape') { closeLightbox(); return; }
+    if (e.key !== 'Tab') return;
+    const focusable = [...lb.querySelectorAll('button:not([disabled])')].filter(el => !el.closest('.hidden'));
+    if (focusable.length < 2) { e.preventDefault(); return; }
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
+  lb.addEventListener('keydown', lightboxTrapHandler);
 }
 
 function closeLightbox() {
-  document.getElementById('achievement-lightbox').classList.add('hidden');
+  const lb = document.getElementById('achievement-lightbox');
+  if (!lb) return;
+  lb.classList.add('hidden');
+  if (lightboxTrapHandler) { lb.removeEventListener('keydown', lightboxTrapHandler); lightboxTrapHandler = null; }
+  if (lightboxTrigger) { lightboxTrigger.focus(); lightboxTrigger = null; }
 }

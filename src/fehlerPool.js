@@ -56,13 +56,13 @@ function renderList() {
     const allSelected = questions.every(q => selectedIds.has(q.id));
 
     block.innerHTML = `
-      <div class="fp-cat-header" id="${catId}">
+      <div class="fp-cat-header" id="${catId}" role="button" tabindex="0" aria-expanded="true" aria-controls="${bodyId}">
         <input type="checkbox" class="fp-cat-cb" data-cat="${cat}" onclick="event.stopPropagation()" ${allSelected ? 'checked' : ''}>
         <span class="fp-cat-name">${cat}</span>
         <span class="fp-cat-count">${questions.length} Frage${questions.length !== 1 ? 'n' : ''}</span>
         <span class="fp-cat-chevron open">&#9660;</span>
       </div>
-      <div class="fp-question-list" id="${bodyId}">
+      <div class="fp-question-list" id="${bodyId}" role="region" aria-label="${cat}">
         ${questions.map(q => `
           <label class="fp-question-item">
             <input type="checkbox" class="fp-q-cb" data-id="${q.id}" ${selectedIds.has(q.id) ? 'checked' : ''}>
@@ -72,13 +72,17 @@ function renderList() {
       </div>`;
 
     // Category header collapse toggle
-    block.querySelector(`#${catId}`).addEventListener('click', e => {
+    const headerEl = block.querySelector(`#${catId}`);
+    const toggleFpCat = e => {
       if (e.target.type === 'checkbox') return;
       const body = document.getElementById(bodyId);
       const chev = block.querySelector('.fp-cat-chevron');
-      body.classList.toggle('hidden');
-      chev.classList.toggle('open');
-    });
+      const expanded = body.classList.toggle('hidden') === false;
+      chev.classList.toggle('open', expanded);
+      headerEl.setAttribute('aria-expanded', String(expanded));
+    };
+    headerEl.addEventListener('click', toggleFpCat);
+    headerEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFpCat(e); } });
 
     // Category checkbox
     block.querySelector('.fp-cat-cb').addEventListener('change', e => {

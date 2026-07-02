@@ -84,6 +84,10 @@ export function filterBrowse() {
 
     const header = document.createElement('div');
     header.className = 'fp-cat-header browse-cat-header';
+    header.setAttribute('role', 'button');
+    header.setAttribute('tabindex', '0');
+    header.setAttribute('aria-expanded', 'true');
+    header.setAttribute('aria-controls', bodyId);
     header.innerHTML = `
       <span class="fp-cat-name">${cat}</span>
       <span class="fp-cat-count">${questions.length} Frage${questions.length !== 1 ? 'n' : ''}</span>
@@ -92,12 +96,17 @@ export function filterBrowse() {
     const body = document.createElement('div');
     body.id = bodyId;
     body.className = 'browse-cat-body';
+    body.setAttribute('role', 'region');
+    body.setAttribute('aria-label', cat);
     body.innerHTML = questions.map(q => buildCard(q)).join('');
 
-    header.addEventListener('click', () => {
-      body.classList.toggle('hidden');
-      header.querySelector('.fp-cat-chevron').classList.toggle('open');
-    });
+    const toggle = () => {
+      const expanded = body.classList.toggle('hidden') === false;
+      header.querySelector('.fp-cat-chevron').classList.toggle('open', expanded);
+      header.setAttribute('aria-expanded', String(expanded));
+    };
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
 
     section.appendChild(header);
     section.appendChild(body);
