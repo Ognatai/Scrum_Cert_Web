@@ -203,12 +203,15 @@ async function enterApp(session) {
 
   const guestBanner = document.getElementById('guest-banner');
   const statsBtn = document.getElementById('btn-show-stats');
+  const logoutBtn = document.getElementById('btn-logout-start');
   if (!currentUser) {
     guestBanner.classList.remove('hidden');
     if (statsBtn) statsBtn.classList.add('hidden');
+    if (logoutBtn) logoutBtn.textContent = 'Zurück zum Log-In';
   } else {
     guestBanner.classList.add('hidden');
     if (statsBtn) statsBtn.classList.remove('hidden');
+    if (logoutBtn) logoutBtn.textContent = 'Abmelden';
   }
   show('start-screen');
 }
@@ -344,7 +347,7 @@ async function init() {
     await renderStats(currentUser, new Set(ALL_QUESTIONS.map(q => q.category)).size);
   });
   document.getElementById('btn-logout-start').addEventListener('click', async () => {
-    await signOut();
+    if (currentUser) await signOut();
     inApp = false;
     currentUser = null;
     show('login-screen');
